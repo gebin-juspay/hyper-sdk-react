@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package in.juspay.hypersdkreact;
+package in._juspay.hypersdkreact;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;

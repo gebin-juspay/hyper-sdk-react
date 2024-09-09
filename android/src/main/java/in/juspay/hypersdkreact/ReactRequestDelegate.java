@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package in.juspay.hypersdkreact;
+package in._juspay.hypersdkreact;
 
 import android.app.Activity;
 import android.os.Build;

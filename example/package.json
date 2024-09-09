@@ -1,6 +1,6 @@
 {
-  "name": "hyper-sdk-react-example",
-  "description": "Example app for hyper-sdk-react",
+  "name": "_juspay-payment-sdk-react-example",
+  "description": "Example app for _juspay-payment-sdk-react",
   "version": "0.0.1",
   "private": true,
   "scripts": {

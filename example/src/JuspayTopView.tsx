@@ -1,7 +1,7 @@
 import React from 'react';
 import { getOrderDetails } from './DataStore';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
-import HyperSdkReact from 'hyper-sdk-react';
+import _JuspaySDKReact from '_juspay-payment-sdk-react';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -13,7 +13,7 @@ const JuspayTopView = () => {
       onLayout={(event) => {
         const { height, width } = event.nativeEvent.layout;
         console.log('image height', height, width);
-        HyperSdkReact.updateMerchantViewHeight('JuspayHeader', height);
+        _JuspaySDKReact.updateMerchantViewHeight('JuspayHeader', height);
       }}
     >
       <Image source={require('../images/promotion.png')} style={styles.image} />

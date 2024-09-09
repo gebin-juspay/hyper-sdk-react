@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 // import { Picker } from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
-import HyperSdkReact, { HyperFragmentView } from 'hyper-sdk-react';
+import _JuspaySDKReact, { HyperFragmentView } from '_juspay-payment-sdk-react';
 import HyperAPIUtils from './API';
 import HyperUtils from './Utils';
 import { useNavigation } from '@react-navigation/native';
@@ -130,9 +130,9 @@ class ProcessScreen extends React.Component {
   }
 
   componentDidMount() {
-    const eventEmitter = new NativeEventEmitter(NativeModules.HyperSdkReact);
+    const eventEmitter = new NativeEventEmitter(NativeModules._JuspaySDKReact);
     this.eventListener = eventEmitter.addListener(
-      HyperSdkReact.HyperEvent,
+      _JuspaySDKReact.HyperEvent,
       (resp) => {
         // HyperUtils.alertCallbackResponse('ProcessScreen', resp);
         this.setState({ resultText: resp });
@@ -144,7 +144,7 @@ class ProcessScreen extends React.Component {
         this.handleClose();
         return true;
       }
-      return !HyperSdkReact.isNull() && HyperSdkReact.onBackPressed();
+      return !_JuspaySDKReact.isNull() && _JuspaySDKReact.onBackPressed();
     });
   }
 
@@ -221,7 +221,7 @@ class ProcessScreen extends React.Component {
               signNew,
               this.merchantKeyId
             );
-            HyperSdkReact.process(JSON.stringify(payload));
+            _JuspaySDKReact.process(JSON.stringify(payload));
           }}
         />
       </View>
@@ -376,7 +376,7 @@ class ProcessScreen extends React.Component {
                 title="Get Payment Methods"
                 onPress={() => {
                   var payload = HyperUtils.generatePaymentMethodsPayload();
-                  HyperSdkReact.process(JSON.stringify(payload));
+                  _JuspaySDKReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -388,7 +388,7 @@ class ProcessScreen extends React.Component {
                   var payload = HyperUtils.generateListCardsPayload(
                     this.clientAuthToken
                   );
-                  HyperSdkReact.process(JSON.stringify(payload));
+                  _JuspaySDKReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -400,7 +400,7 @@ class ProcessScreen extends React.Component {
                   var payload = HyperUtils.generateGetUPIAppsPayload(
                     this.orderId
                   );
-                  HyperSdkReact.process(JSON.stringify(payload));
+                  _JuspaySDKReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -422,7 +422,7 @@ class ProcessScreen extends React.Component {
                     this.clientAuthToken
                   );
                   console.log(payload);
-                  HyperSdkReact.process(JSON.stringify(payload));
+                  _JuspaySDKReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -444,7 +444,7 @@ class ProcessScreen extends React.Component {
                       this.sdkPresent
                     );
                     console.log(payload);
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -468,7 +468,7 @@ class ProcessScreen extends React.Component {
                       this.clientAuthToken,
                       this.nbTxnBank
                     );
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -555,7 +555,7 @@ class ProcessScreen extends React.Component {
                       this.authType,
                       this.state.saveToLocker
                     );
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -597,7 +597,7 @@ class ProcessScreen extends React.Component {
                       this.vpa,
                       this.state.upiSdkPresent
                     );
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -621,7 +621,7 @@ class ProcessScreen extends React.Component {
                       this.clientAuthToken
                     );
                     console.log(payload);
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -662,7 +662,7 @@ class ProcessScreen extends React.Component {
                       this.otp,
                       this.clientAuthToken
                     );
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -720,7 +720,7 @@ class ProcessScreen extends React.Component {
                       this.directWalletToken,
                       this.sdkPresent
                     );
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -752,7 +752,7 @@ class ProcessScreen extends React.Component {
                       this.walletId,
                       this.clientAuthToken
                     );
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -776,7 +776,7 @@ class ProcessScreen extends React.Component {
                       this.clientAuthToken
                     );
                     console.log(payload);
-                    HyperSdkReact.process(JSON.stringify(payload));
+                    _JuspaySDKReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -824,21 +824,7 @@ class ProcessScreen extends React.Component {
                       });
                   }}
                 />
-                {/* <CustomButton
-                  title="Process"
-                  onPress={() => {
-                    var payload = HyperUtils.generateProcessPayloadPP(
-                      this.state.pickerSelected,
-                      this.clientId,
-                      this.merchantId,
-                      JSON.stringify(this.orderDetails),
-                      this.signature,
-                      this.merchantKeyId
-                    );
-
-                    HyperSdkReact.process(JSON.stringify(payload));
-                  }}
-                />
+                {/*
                 <CustomButton
                   title="Process With New Activity"
                   onPress={() => {
@@ -851,9 +837,25 @@ class ProcessScreen extends React.Component {
                       this.merchantKeyId
                     );
 
-                    HyperSdkReact.processWithActivity(JSON.stringify(payload));
+                    _JuspaySDKReact.processWithActivity(JSON.stringify(payload));
                   }}
                 /> */}
+
+                <CustomButton
+                  title="Process"
+                  onPress={() => {
+                    var payload = HyperUtils.generateProcessPayloadPP(
+                      this.state.pickerSelected,
+                      this.clientId,
+                      this.merchantId,
+                      JSON.stringify(this.orderDetails),
+                      this.signature,
+                      this.merchantKeyId
+                    );
+
+                    _JuspaySDKReact.process(JSON.stringify(payload));
+                  }}
+                />
 
                 <CustomButton
                   title="Generate Process Payload"
@@ -879,7 +881,7 @@ class ProcessScreen extends React.Component {
             {/* <CustomButton
               title="Is Initialised?"
               onPress={() => {
-                HyperSdkReact.isInitialised().then((init: boolean) => {
+                _JuspaySDKReact.isInitialised().then((init: boolean) => {
                   // console.warn('isInitialised:', init);
                   HyperUtils.showCopyAlert('isInitialised', init + '');
                 });
@@ -888,7 +890,7 @@ class ProcessScreen extends React.Component {
             <CustomButton
               title="Terminate"
               onPress={() => {
-                HyperSdkReact.terminate();
+                _JuspaySDKReact.terminate();
               }}
             />
             {/* <CustomButton
@@ -983,7 +985,7 @@ class ProcessScreen extends React.Component {
                     hidePaymentWidget: false,
                   },
                 };
-                HyperSdkReact.process(JSON.stringify(data));
+                _JuspaySDKReact.process(JSON.stringify(data));
               }}
             />
           </View> */}

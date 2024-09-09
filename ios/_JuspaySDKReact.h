@@ -9,19 +9,17 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventEmitter.h>
-#import <HyperSDK/HyperSDK.h>
+#import <_JuspayPaymentServices/_JuspayPaymentServices.h>
 #import <React/RCTRootView.h>
 #import <React/RCTViewManager.h>
 
-@interface HyperSdkReact : RCTEventEmitter <RCTBridgeModule>
-
-#import <HyperSDK/HyperSDK.h>
-@property HyperServices *hyperInstance;
-@property id <HyperDelegate> delegate;
+@interface _JuspaySDKReact : RCTEventEmitter <RCTBridgeModule>
+@property _JuspayPaymentServices *hyperInstance;
+@property id <_JuspayDelegate> delegate;
 
 @end
 
-@interface SdkDelegate : NSObject <HyperDelegate>
+@interface SdkDelegate : NSObject <_JuspayDelegate>
 @property (nonatomic, strong) NSMutableDictionary *rootHolder;
 @property (nonatomic, strong) NSMutableDictionary *heightHolder;
 @property (nonatomic, strong) NSMutableDictionary *heightConstraintHolder;

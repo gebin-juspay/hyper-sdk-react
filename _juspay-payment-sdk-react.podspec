@@ -22,7 +22,7 @@ end
 puts ("HyperSDK Version: #{hyper_sdk_version}")
 
 Pod::Spec.new do |s|
-  s.name         = "hyper-sdk-react"
+  s.name         = "_juspay-payment-sdk-react"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
@@ -30,11 +30,11 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "12.0" }
-  s.source       = { :git => "https://github.com/juspay/hyper-sdk-react.git", :tag => "v#{s.version}" }
+  s.source       = { :git => "https://github.com/juspay/_juspay-payment-sdk-react.git", :tag => "v#{s.version}" }
 
   s.static_framework = true
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
-  s.dependency "HyperSDK", hyper_sdk_version
+  s.dependency "_JuspayPaymentServices", hyper_sdk_version
 end

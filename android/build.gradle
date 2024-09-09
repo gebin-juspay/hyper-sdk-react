@@ -75,8 +75,8 @@ repositories {
 if (isNewArchitectureEnabled()) {
     react {
         jsRootDir = file("../src/")
-        libraryName = "HyperSdkReact"
-        codegenJavaPackageName = "com.hypersdkreact"
+        libraryName = "_JuspaySDKReact"
+        codegenJavaPackageName = "in._juspay"
     }
 }
 
@@ -123,15 +123,15 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.facebook.react:react-native:+'
     implementation 'androidx.appcompat:appcompat:1.0.0'
-    compileOnly "in.juspay:hypercheckoutlite:${getHyperSDKVersion(rootProject)}"
+    compileOnly "in.juspay:hypercheckoutlite:2.2.0-xtest.09"
+    implementation 'in.juspay:_juspaywrappersdk:2.2.0-xtest.09'
 }
 
 hyperSdkPlugin {
-    clientId = getClientId(rootProject)
-    sdkVersion = getHyperSDKVersion(rootProject)
-    excludedMicroSDKs = getExcludedMicroSdks(rootProject)
+    clientId = 'geddit'
+    sdkVersion = '2.2.0-xtest.09'
 }
 
-if(rootProject.hasProperty('hyperAssetVersion')) {
-    hyperSdkPlugin.assetVersion = rootProject.hyperAssetVersion
-}
+// if(rootProject.hasProperty('hyperAssetVersion')) {
+//     hyperSdkPlugin.assetVersion = rootProject.hyperAssetVersion
+// }

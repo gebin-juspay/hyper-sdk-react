@@ -14,7 +14,7 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
-import in.juspay.hypersdkreact.HyperSdkReactModule;
+import in._juspay.hypersdkreact.HyperSdkReactModule;
 
 public class MainActivity extends ReactActivity {
 

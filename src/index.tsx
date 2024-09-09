@@ -8,13 +8,13 @@
 import { NativeModules, Platform } from 'react-native';
 
 const LINKING_ERROR =
-  `The package 'hyper-sdk-react' doesn't seem to be linked. Make sure: \n\n` +
+  `The package '_juspay-payment-sdk-react' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const HyperSdkReact = NativeModules.HyperSdkReact
-  ? NativeModules.HyperSdkReact
+const _JuspaySDKReact = NativeModules._JuspaySDKReact
+  ? NativeModules._JuspaySDKReact
   : new Proxy(
       {},
       {
@@ -27,19 +27,22 @@ const HyperSdkReact = NativeModules.HyperSdkReact
 export { default as HyperFragmentView } from './HyperFragmentView';
 
 if (Platform.OS === 'android') {
-  HyperSdkReact.updateBaseViewController = () => {};
-  HyperSdkReact.updateMerchantViewHeight = (_tag: string, _height: number) => {
+  _JuspaySDKReact.updateBaseViewController = () => {};
+  _JuspaySDKReact.updateMerchantViewHeight = (
+    _tag: string,
+    _height: number
+  ) => {
     console.log('UpdateMerchantViewHeight not available for android');
   };
 }
 
 if (Platform.OS === 'ios') {
-  HyperSdkReact.processWithActivity = (data: string) => {
-    HyperSdkReact.process(data);
+  _JuspaySDKReact.processWithActivity = (data: string) => {
+    _JuspaySDKReact.process(data);
   };
 }
 
-type HyperSdkReactType = {
+type _JuspaySDKReactType = {
   HyperEvent: string;
   preFetch(data: string): void;
   createHyperServices(): void;
@@ -60,4 +63,4 @@ type HyperSdkReactType = {
   JuspayFooterAttached: string;
 };
 
-export default HyperSdkReact as HyperSdkReactType;
+export default _JuspaySDKReact as _JuspaySDKReactType;

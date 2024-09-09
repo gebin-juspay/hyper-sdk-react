@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package in.juspay.hypersdkreact;
+package in._juspay.hypersdkreact;
 
 import android.app.Activity;
 import android.app.Application;
@@ -40,12 +40,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import in.juspay.hypercheckoutlite.HyperCheckoutLite;
-import in.juspay.hypersdk.core.MerchantViewType;
+import in._juspay._juspaywrappersdk._JuspayPaymentsCheckoutLite;
+import in._juspay._juspaywrappersdk._JuspayMerchantViewType;
 import in.juspay.hypersdk.core.SdkTracker;
-import in.juspay.hypersdk.data.JuspayResponseHandler;
-import in.juspay.hypersdk.ui.HyperPaymentsCallbackAdapter;
-import in.juspay.services.HyperServices;
+import in._juspay._juspaywrappersdk._JuspayPaymentsCallbackAdapter;
+import in._juspay._juspaywrappersdk._JuspayPaymentServices;
 
 
 /**
@@ -55,7 +54,7 @@ import in.juspay.services.HyperServices;
  */
 @ReactModule(name = HyperSdkReactModule.NAME)
 public class HyperSdkReactModule extends ReactContextBaseJavaModule implements ActivityEventListener {
-    static final String NAME = "HyperSdkReact";
+    static final String NAME = "_JuspaySDKReact";
     private static final String HYPER_EVENT = "HyperEvent";
 
     @Nullable
@@ -72,9 +71,9 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     private static final ActivityResultDelegate activityResultDelegate = new ActivityResultDelegate();
 
     @Nullable
-    private HyperServices hyperServices;
+    private _JuspayPaymentServices hyperServices;
 
-    private static WeakReference<HyperServices> hyperServicesReference = new WeakReference<>(null);
+    private static WeakReference<_JuspayPaymentServices> hyperServicesReference = new WeakReference<>(null);
 
     private final ReactApplicationContext context;
 
@@ -168,7 +167,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     public Map<String, Object> getConstants() {
         return new HashMap<String, Object>() {{
             put(HYPER_EVENT, HYPER_EVENT);
-            put(MerchantViewConstants.JUSPAY_HEADER, MerchantViewConstants.JUSPAY_HEADER);
+            put(MerchantViewConstants.JUSPAY_HEADER, MerchantViewConstants.JUSPAY_HEADER); // hola todo
             put(MerchantViewConstants.JUSPAY_HEADER_ATTACHED, MerchantViewConstants.JUSPAY_HEADER_ATTACHED);
             put(MerchantViewConstants.JUSPAY_FOOTER, MerchantViewConstants.JUSPAY_FOOTER);
             put(MerchantViewConstants.JUSPAY_FOOTER_ATTACHED, MerchantViewConstants.JUSPAY_FOOTER_ATTACHED);
@@ -176,7 +175,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     }
 
     @Nullable
-    public static HyperServices getHyperServices() {
+    public static _JuspayPaymentServices getHyperServices() {
         return hyperServicesReference.get();
     }
 
@@ -184,7 +183,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     public void preFetch(String data) {
         try {
             JSONObject payload = new JSONObject(data);
-            HyperServices.preFetch(getReactApplicationContext(), payload);
+            _JuspayPaymentServices.preFetch(getReactApplicationContext(), payload);
         } catch (JSONException e) {
             SdkTracker.trackAndLogBootException(
                     NAME,
@@ -195,6 +194,11 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                     e
             );
         }
+    }
+
+    @ReactMethod
+    public void create_JuspayPaymentServices() {
+        createHyperServices();
     }
 
     @ReactMethod
@@ -225,7 +229,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                 return;
             }
 
-            hyperServices = new HyperServices(activity);
+            hyperServices = new _JuspayPaymentServices(activity,"geddit"); // gebin hardcode tenentParamsHere
             hyperServicesReference = new WeakReference<>(hyperServices);
 
             requestPermissionsResultDelegate.set(hyperServices);
@@ -267,9 +271,9 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                     return;
                 }
 
-                hyperServices.initiate(activity, payload, new HyperPaymentsCallbackAdapter() {
+                hyperServices.initiate(activity, payload, new _JuspayPaymentsCallbackAdapter() {
                     @Override
-                    public void onEvent(JSONObject data, JuspayResponseHandler handler) {
+                    public void onEvent(JSONObject data) {
                         // Send out the event to the merchant on JS side
                         if (data.optString("event").equals("process_result") && wasProcessWithActivity) {
                             Activity processActivity = processActivityRef.get();
@@ -286,7 +290,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
                     @Nullable
                     @Override
-                    public View getMerchantView(ViewGroup viewGroup, MerchantViewType merchantViewType) {
+                    public View getMerchantView(ViewGroup viewGroup, _JuspayMerchantViewType merchantViewType) {
                         Activity activity = (Activity) getCurrentActivity();
                         if (reactInstanceManager == null || activity == null) {
                             return super.getMerchantView(viewGroup, merchantViewType);
@@ -475,9 +479,9 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                 ProcessActivity.setActivityCallback(new ActivityCallback() {
                     @Override
                     public void onCreated(@NonNull FragmentActivity processActivity) {
-                        HyperCheckoutLite.openPaymentPage(processActivity, sdkPayload, new HyperPaymentsCallbackAdapter() {
+                        _JuspayPaymentsCheckoutLite.openPaymentPage(processActivity, sdkPayload, new _JuspayPaymentsCallbackAdapter() {
                             @Override
-                            public void onEvent(JSONObject data, JuspayResponseHandler handler) {
+                            public void onEvent(JSONObject data) {
                                 if (data.optString("event").equals("process_result")) {
                                     processActivity.finish();
                                     processActivity.overridePendingTransition(0, android.R.anim.fade_out);
@@ -490,7 +494,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
                     @Override
                     public boolean onBackPressed() {
-                        return HyperCheckoutLite.onBackPressed();
+                        return _JuspayPaymentsCheckoutLite.onBackPressed();
                     }
 
                     @Override
@@ -574,20 +578,20 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     }
 
     /**
-     * A holder class that allows us to maintain HyperServices instance statically without causing a
-     * memory leak. This was required because HyperServices class maintains a reference to the
+     * A holder class that allows us to maintain _JuspayPaymentServices instance statically without causing a
+     * memory leak. This was required because _JuspayPaymentServices class maintains a reference to the
      * activity internally.
      */
     private static class RequestPermissionsResultDelegate {
         @NonNull
-        private WeakReference<HyperServices> hyperServicesHolder = new WeakReference<>(null);
+        private WeakReference<_JuspayPaymentServices> hyperServicesHolder = new WeakReference<>(null);
 
-        synchronized void set(@NonNull HyperServices hyperServices) {
+        synchronized void set(@NonNull _JuspayPaymentServices hyperServices) {
             this.hyperServicesHolder = new WeakReference<>(hyperServices);
         }
 
         void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-            HyperServices hyperServices = hyperServicesHolder.get();
+            _JuspayPaymentServices hyperServices = hyperServicesHolder.get();
 
             if (hyperServices == null) {
                 SdkTracker.trackBootLifecycle(
@@ -612,14 +616,14 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
     private static class ActivityResultDelegate {
         @NonNull
-        private WeakReference<HyperServices> hyperServicesHolder = new WeakReference<>(null);
+        private WeakReference<_JuspayPaymentServices> hyperServicesHolder = new WeakReference<>(null);
 
-        synchronized void set(@NonNull HyperServices hyperServices) {
+        synchronized void set(@NonNull _JuspayPaymentServices hyperServices) {
             this.hyperServicesHolder = new WeakReference<>(hyperServices);
         }
 
         void onActivityResult(int requestCode, int resultCode, Intent data) {
-            HyperServices hyperServices = hyperServicesHolder.get();
+            _JuspayPaymentServices hyperServices = hyperServicesHolder.get();
 
             if (hyperServices == null) {
                 SdkTracker.trackBootLifecycle(

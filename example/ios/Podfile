@@ -1,3 +1,5 @@
+source 'https://github.com/balaganesh-juspay/private-spec-repo.git'
+source 'https://cdn.cocoapods.org/'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -61,7 +63,7 @@ target 'HyperSdkReactExample' do
       end
     end
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
-    fuse_path = "./Pods/HyperSDK/Fuse.rb"
+    fuse_path = "./Pods/TestServices/Fuse.rb"
     clean_assets = true # Pass true to re-download all the assets
     if File.exist?(fuse_path)
       if system("ruby", fuse_path.to_s, clean_assets.to_s)
