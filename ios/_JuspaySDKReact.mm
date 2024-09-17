@@ -157,6 +157,27 @@ NSString *JUSPAY_FOOTER_ATTACHED = @"JuspayFooterAttached";
     return dispatch_get_main_queue();
 }
 
+
+- (void) createPaymentServices:(NSString*) clientId {
+    if (self.hyperInstance == NULL) {
+        self.hyperInstance = [[_JuspayPaymentServices alloc] initWithClientId:clientId];
+        _hyperServicesReference = self.hyperInstance;
+    }
+}
+
+- (NSString*) getClientId:(NSDictionary*)data {
+    if(data == nil || data["payload"] == nil) {
+        return nil;
+    }
+    if(data["clientId"]) {
+        return data["clientId"];
+    }
+    if(data["client_id"]) {
+        return data["client_id"];
+    }
+    return nil;
+}
+
 + (BOOL)requiresMainQueueSetup{
     return YES;
 }
@@ -201,10 +222,11 @@ RCT_EXPORT_METHOD(preFetch:(NSString *)data) {
 }
 
 RCT_EXPORT_METHOD(createHyperServices) {
-    if (self.hyperInstance == NULL) {
-        self.hyperInstance = [[_JuspayPaymentServices alloc] init];
-        _hyperServicesReference = self.hyperInstance;
-    }
+
+}
+
+RCT_EXPORT_METHOD(create_JuspayPaymentServices:(NSString*) clientId) {
+    [self createPaymentServices:clientId];
 }
 
 RCT_EXPORT_METHOD(initiate:(NSString *)data) {
@@ -212,7 +234,11 @@ RCT_EXPORT_METHOD(initiate:(NSString *)data) {
         @try {
             NSDictionary *jsonData = [_JuspaySDKReact stringToDictionary:data];
             if (jsonData && [jsonData isKindOfClass:[NSDictionary class]] && jsonData.allKeys.count>0) {
-
+                NSString *clientId = [self getClientId:jsonData];
+                if(clientId == nil) {
+                    clientId = @"";
+                }
+                [self createPaymentServices:clientId];
                 UIViewController *baseViewController = RCTPresentedViewController();
                 __weak _JuspaySDKReact *weakSelf = self;
                 self.delegate = [[SdkDelegate alloc] initWithBridge:self.bridge];

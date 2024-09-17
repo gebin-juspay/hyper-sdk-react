@@ -196,13 +196,29 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
         }
     }
 
-    @ReactMethod
-    public void create_JuspayPaymentServices() {
-        createHyperServices();
+    @NonNull
+    private String getClientId(JSONObject bundleParams) {
+        if (bundleParams.has("payload")) {
+            JSONObject payload = bundleParams.optJSONObject("payload");
+            if (payload != null) {
+                if (payload.has("client_id")) {
+                    return payload.optString("client_id");
+                } else if (payload.has("clientId")) {
+                    return payload.optString("clientId");
+                }
+            }
+        }
+        return "";
     }
+
 
     @ReactMethod
     public void createHyperServices() {
+
+    }
+
+    @ReactMethod
+    public void create_JuspayPaymentServicesWithClientId(String clientId) {
         synchronized (lock) {
             FragmentActivity activity = (FragmentActivity) getCurrentActivity();
 
@@ -229,7 +245,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                 return;
             }
 
-            hyperServices = new _JuspayPaymentServices(activity,"sdktest"); // gebin hardcode tenentParamsHere
+            hyperServices = new _JuspayPaymentServices(activity,clientId); // gebin hardcode tenentParamsHere
             hyperServicesReference = new WeakReference<>(hyperServices);
 
             requestPermissionsResultDelegate.set(hyperServices);
@@ -262,13 +278,27 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                 }
 
                 if (hyperServices == null) {
-                    SdkTracker.trackBootLifecycle(
+                    String clientId = getClientId(payload);
+                    if(clientId.equals("")) {
+                        SdkTracker.trackBootLifecycle(
+                            LogConstants.SUBCATEGORY_HYPER_SDK,
+                            LogConstants.LEVEL_ERROR,
+                            LogConstants.SDK_TRACKER_LABEL,
+                            "initiate",
+                            "client id is null");
+                        return;
+                    }
+                    create_JuspayPaymentServicesWithClientId(clientId);
+                    if(hyperServices == null) {
+                        SdkTracker.trackBootLifecycle(
                             LogConstants.SUBCATEGORY_HYPER_SDK,
                             LogConstants.LEVEL_ERROR,
                             LogConstants.SDK_TRACKER_LABEL,
                             "initiate",
                             "hyperServices is null");
-                    return;
+                        return;
+                    }
+
                 }
 
                 hyperServices.initiate(activity, payload, new _JuspayPaymentsCallbackAdapter() {
