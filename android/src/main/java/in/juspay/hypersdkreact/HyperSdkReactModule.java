@@ -229,7 +229,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                 return;
             }
 
-            hyperServices = new _JuspayPaymentServices(activity,"geddit"); // gebin hardcode tenentParamsHere
+            hyperServices = new _JuspayPaymentServices(activity,"sdktest"); // gebin hardcode tenentParamsHere
             hyperServicesReference = new WeakReference<>(hyperServices);
 
             requestPermissionsResultDelegate.set(hyperServices);

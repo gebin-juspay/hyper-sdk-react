@@ -1,6 +1,6 @@
 {
-  "merchantId": "",
-  "clientId": "",
+  "merchantId": "sdktest",
+  "clientId": "sdktest",
   "apiKey": "",
   "privateKey": "",
   "merchantKeyId": ""

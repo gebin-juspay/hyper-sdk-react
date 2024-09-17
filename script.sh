@@ -5,7 +5,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 # Check if the tenant ID is provided
-if [ "$#" -ne 4 ]; then
+if [ "$#" -ne 8 ]; then
     echo "Usage: $0 <tenant_id>"
     exit 1
 fi
@@ -19,6 +19,14 @@ CAPITALIZED_TENANT_ID=$2
 SDK_NAME=$3
 
 PACKAGE_DOMAIN=$4
+
+WRAPPER_SDK_NAME=$5
+
+
+PLUGIN_NAME=$6
+PLUGIN_ID=$7
+
+GROUP_ID=$8
 
 # Confirm the replacements
 # Rename files starting with _Juspay to start with _tenant_id
@@ -254,7 +262,11 @@ process_files() {
             # fi
 
             # Perform text replacements
-            sed -i.back "s/in._juspay/$PACKAGE_DOMAIN/g" "$file"
+            sed -i.bak "s/in._juspay_group_id/$GROUP_ID/g" "$file"
+            sed -i.bak "s/hypersdk.plugin/$PLUGIN_ID/g" "$file"
+            sed -i.bak "s/_juspaySdkPlugin/$PLUGIN_NAME/g"
+            sed -i.bak "s/_juspaywrappersdk/$WRAPPER_SDK_NAME/g" "$file"
+            sed -i.bak "s/in._juspay/$PACKAGE_DOMAIN/g" "$file"
             sed -i.bak "s/_juspay-payment-sdk-react/$SDK_NAME/g" "$file"
             sed -i.bak "s/_juspay/$TENANT_ID/g" "$file"
             sed -i.bak "s/_Juspay/$CAPITALIZED_TENANT_ID/g" "$file"
@@ -299,12 +311,12 @@ echo "Replacement and renaming complete."
 
 
 # Process specific file types
-for ext in mm m kt java js tsx h md podspec json podfilef; do
+for ext in mm m kt java js tsx h md podspec json xml gradle podfilef; do
     process_files "$ext"
 done
 
 
-Main script
+# Main script
 check_repo_exists || create_repo
 if [ -d "$TARGET_REPO_PATH" ]; then
     echo "The directory '$TARGET_REPO_PATH' already exists."
@@ -314,7 +326,7 @@ fi
 clone_repo
 move_contents
 # replace_contents
-commit_and_push_changes
+# commit_and_push_changes
 rm -rf "$TEMPERORY_SDK_PATH"
 
 # echo "Repository setup and push completed."
