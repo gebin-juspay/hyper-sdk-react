@@ -9,7 +9,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventEmitter.h>
-#import <_JuspayPaymentServices/_JuspayPaymentServices.h>
+#import <_JuspayPayments/_JuspayPaymentServices.h>
 #import <React/RCTRootView.h>
 #import <React/RCTViewManager.h>
 

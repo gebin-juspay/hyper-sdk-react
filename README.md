@@ -70,7 +70,7 @@ Add below post_install script in the Podfile
 
 ```sh
 post_install do |installer|
- fuse_path = "./Pods/HyperSDK/Fuse.rb"
+ fuse_path = "./Pods/_JuspayPayments/Fuse.rb"
  clean_assets = false # Pass true to re-download all the assets
  if File.exist?(fuse_path)
    if system("ruby", fuse_path.to_s, clean_assets.to_s)
@@ -90,7 +90,7 @@ clientId = <clientId shared by Juspay Team>
 ### Exposed APIs
 
 ```ts
-type HyperSdkReactType = {
+type _JuspaySDKReactType = {
   HyperEvent: string;
   preFetch(data: string): void;
   createHyperServices(): void;
@@ -106,7 +106,7 @@ type HyperSdkReactType = {
 
 const { _JuspaySDKReact } = NativeModules;
 
-export default _JuspaySDKReact as HyperSdkReactType;
+export default _JuspaySDKReact as _JuspaySDKReactType;
 ```
 
 ### Import HyperSDK

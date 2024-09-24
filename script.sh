@@ -5,7 +5,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 # Check if the tenant ID is provided
-if [ "$#" -ne 8 ]; then
+if [ "$#" -ne 10 ]; then
     echo "Usage: $0 <tenant_id>"
     exit 1
 fi
@@ -27,6 +27,10 @@ PLUGIN_NAME=$6
 PLUGIN_ID=$7
 
 GROUP_ID=$8
+
+REACT_SDK_NAME=$9
+
+SERVICES_NAME=${10}
 
 # Confirm the replacements
 # Rename files starting with _Juspay to start with _tenant_id
@@ -262,9 +266,11 @@ process_files() {
             # fi
 
             # Perform text replacements
+            sed -i.bak "s/_JuspayPaymentServices/$SERVICES_NAME/g" "$file"
+            sed -i.bak "s/_JuspaySDKReact/$REACT_SDK_NAME/g" "$file"
             sed -i.bak "s/in._juspay_group_id/$GROUP_ID/g" "$file"
             sed -i.bak "s/hypersdk.plugin/$PLUGIN_ID/g" "$file"
-            sed -i.bak "s/_juspaySdkPlugin/$PLUGIN_NAME/g"
+            sed -i.bak "s/_juspaySdkPlugin/$PLUGIN_NAME/g" "$file"
             sed -i.bak "s/_juspaywrappersdk/$WRAPPER_SDK_NAME/g" "$file"
             sed -i.bak "s/in._juspay/$PACKAGE_DOMAIN/g" "$file"
             sed -i.bak "s/_juspay-payment-sdk-react/$SDK_NAME/g" "$file"

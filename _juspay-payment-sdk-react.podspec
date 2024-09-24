@@ -36,5 +36,5 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
-  s.dependency "_JuspayPaymentServices", hyper_sdk_version
+  s.dependency "_JuspayPayments", '0.0.4'
 end
