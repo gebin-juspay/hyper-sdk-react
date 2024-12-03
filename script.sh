@@ -53,6 +53,8 @@ get_absolute_path() {
 
 HOME_PATH=$(get_absolute_path "../")
 TEMPLATE_REPO_PATH=$(get_absolute_path "./")
+last_commit_message=$(git log -1 --pretty=%B)
+
 cd "$TEMPLATE_REPO_PATH"
 
 echo "gebin is here $HOME_PATH"
@@ -65,6 +67,8 @@ mkdir "$HOME_PATH/output"
 # Loop through each tenant
 for tenant in $tenants; do
     echo "Processing tenant: $tenant"payments
+    rm -rf "$TEMPERORY_SDK_PATH/hyper-sdk-react"
+    rm -rf "$TARGET_REPO_PATH/hyper-sdk-react"
     TENANT_ID=$tenant
 
     # Parse the JSON response using the tenant variable
@@ -78,8 +82,10 @@ for tenant in $tenants; do
     android_sdkName=$(echo "$response" | jq -r ".${tenant}.android.sdkName")
     android_packageName=$(echo "$response" | jq -r ".${tenant}.android.packageName")
     android_pluginGroupId=$(echo "$response" | jq -r ".${tenant}.android.pluginGroupId")
+    echo "gbin juspay plugin id $android_pluginGroupId"
     android_pluginName=$(echo "$response" | jq -r ".${tenant}.android.pluginName")
-    android_pluginArtifactId=$(echo "$response" | jq -r ".${tenant}.android.pluginArticactId")
+    android_pluginArtifactId=$(echo "$response" | jq -r ".${tenant}.android.pluginArtifactId")
+    echo "gbin juspay art id $android_pluginArtifactId"
     android_releaseConfigUrl=$(echo "$response" | jq -r ".${tenant}.android.releaseConfigUrl")
 
     flutter_sdkName=$(echo "$response" | jq -r ".${tenant}.flutter.sdkName")
@@ -104,10 +110,9 @@ for tenant in $tenants; do
 
     # Variables
 
-    TEMPERORY_SDK_PATH=$(get_absolute_path "$HOME_PATH/temp/$react_sdkName")  # Directory with contents to move
-    TARGET_REPO_PATH=$(get_absolute_path "$HOME_PATH/output/$react_sdkName")     # Directory to move contents to
+    TEMPERORY_SDK_PATH=$(get_absolute_path "$HOME_PATH/temp/")  # Directory with contents to move
+    TARGET_REPO_PATH=$(get_absolute_path "$HOME_PATH/output/")     # Directory to move contents to
     REMOTE_URL="git@github.com:gebin-juspay/$react_sdkName.git"
-    last_commit_message=$(git log -1 --pretty=%B)
 
 
 
@@ -120,10 +125,11 @@ for tenant in $tenants; do
     cp -r "$TEMPLATE_REPO_PATH" "$TEMPERORY_SDK_PATH"
     cp -r "$TEMPLATE_REPO_PATH" "$TARGET_REPO_PATH"
 
-    cd "$TARGET_REPO_PATH"
+    cd "$TARGET_REPO_PATH/hyper-sdk-react"
+    git checkout -b $react_sdkName || git checkout $react_sdkName
 
-
-    find . -mindepth 1 -not -name '.git' -exec rm -rf {} +
+    git rm -rf .
+    git clean -fxd
 
     copy_contents() {
         if [ ! -d "$TEMPLATE_REPO_PATH" ]; then
@@ -263,7 +269,7 @@ for tenant in $tenants; do
 
 
     function commit_and_push_changes() {
-        cd "$TARGET_REPO_PATH" || exit
+        cd "$TARGET_REPO_PATH/hyper-sdk-react" || exit
         if [ ! -d "./git" ]; then
             echo "Initializing a fresh repo"
             git init
@@ -279,15 +285,15 @@ for tenant in $tenants; do
         git commit -m "$last_commit_message"
 
         echo "Pushing changes to the remote repository..."
-        git push -u origin main
+        git push --set-upstream origin $react_sdkName
     }
 
     # rm -rf "./git"
 
     # copy_contents
-    # cd "$TEMPERORY_SDK_PATH"
-
-    # rm -rf "./git"
+    cd "$TEMPERORY_SDK_PATH/hyper-sdk-react"
+    echo "gebin removing git"
+    rm -rf ".git"
 
     echo "Replacing '_juspay' with '$TENANT_ID' and '_Juspay' with '$classNamePrefix'... and sdk name is '$react_sdkName'"
 
@@ -331,40 +337,40 @@ for tenant in $tenants; do
     }
 
 
-    # echo "Renaming files starting with _Juspay..."
-    # find . -type d \( -name node_modules \) -prune -o -type f -name '_Juspay*' -print | while IFS= read -r file; do
-    #     if [ -f "$file" ]; then
-    #         new_file=$(echo "$file" | sed "s/_Juspay/$classNamePrefix/")
-    #         if [ "$file" != "$new_file" ]; then
-    #             echo "Renaming '$file' to '$new_file'"
-    #             mv "$file" "$new_file"
-    #         fi
-    #     else
-    #         echo "File '$file' does not exist or is not a regular file."
-    #     fi
-    # done
+    echo "Renaming files starting with _Juspay..."
+    find . -type d \( -name node_modules \) -prune -o -type f -name '_Juspay*' -print | while IFS= read -r file; do
+        if [ -f "$file" ]; then
+            new_file=$(echo "$file" | sed "s/_Juspay/$classNamePrefix/")
+            if [ "$file" != "$new_file" ]; then
+                echo "Renaming '$file' to '$new_file'"
+                mv "$file" "$new_file"
+            fi
+        else
+            echo "File '$file' does not exist or is not a regular file."
+        fi
+    done
 
 
-    # echo "Renaming files starting with _juspay-payment-sdk-react..."
-    # find . -type d \( -name node_modules \) -prune -o -type f -name '_juspay-payment-sdk-react*' -print | while IFS= read -r file; do
-    #     if [ -f "$file" ]; then
-    #         new_file=$(echo "$file" | sed "s/_juspay-payment-sdk-react/$react_sdkName/")
-    #         if [ "$file" != "$new_file" ]; then
-    #             echo "Renaming '$file' to '$new_file'"
-    #             mv "$file" "$new_file"
-    #         fi
-    #     else
-    #         echo "File '$file' does not exist or is not a regular file."
-    #     fi
-    # done
+    echo "Renaming files starting with _juspay-payment-sdk-react..."
+    find . -type d \( -name node_modules \) -prune -o -type f -name '_juspay-payment-sdk-react*' -print | while IFS= read -r file; do
+        if [ -f "$file" ]; then
+            new_file=$(echo "$file" | sed "s/_juspay-payment-sdk-react/$react_sdkName/")
+            if [ "$file" != "$new_file" ]; then
+                echo "Renaming '$file' to '$new_file'"
+                mv "$file" "$new_file"
+            fi
+        else
+            echo "File '$file' does not exist or is not a regular file."
+        fi
+    done
 
-    # echo "Replacement and renaming complete."
+    echo "Replacement and renaming complete."
 
 
-    # # Process specific file types
-    # for ext in mm m kt java js tsx h md podspec json xml gradle podfilef; do
-    #     process_files "$ext"
-    # done
+    # Process specific file types
+    for ext in mm m kt java js tsx h md podspec json xml gradle podfilef; do
+        process_files "$ext"
+    done
 
 
     # Main script
@@ -377,8 +383,12 @@ for tenant in $tenants; do
     # clone_repo
     # move_contents
     # replace_contents
-    # commit_and_push_changes
-    # rm -rf "$TEMPERORY_SDK_PATH"
+    cp -r "$TEMPERORY_SDK_PATH/hyper-sdk-react" "$TARGET_REPO_PATH"
+
+
+
+    commit_and_push_changes
+
 done
 
 
