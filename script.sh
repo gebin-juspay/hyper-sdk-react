@@ -117,14 +117,10 @@ for tenant in $tenants; do
     echo "gebin TARGET_REPO_PATH $TARGET_REPO_PATH"
     echo "gebin REMOTE_URL $REMOTE_URL"
     echo "gebin home $HOME_PATH"
-
-    rm -rf "$TEMPLATE_REPO_PATH"
-    mkdir "$TEMPLATE_REPO_PATH"
-    rm -rf "$TARGET_REPO_PATH"
-    mkdir "$TARGER_REPO_PATH"
     cp -r "$TEMPLATE_REPO_PATH" "$TEMPERORY_SDK_PATH"
     cp -r "$TEMPLATE_REPO_PATH" "$TARGET_REPO_PATH"
-    cd "$TARGER_REPO_PATH"
+
+    cd "$TARGET_REPO_PATH"
 
 
     find . -mindepth 1 -not -name '.git' -exec rm -rf {} +
