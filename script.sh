@@ -32,8 +32,10 @@ get_absolute_path() {
     local relative_path="$1"
 
     if [ ! -d "$relative_path" ]; then
+        echo "Gebin is in created path $relativ_path"
         mkdir "$relative_path"
     fi
+
 
     if command -v realpath &> /dev/null; then
         # Use realpath if available
@@ -53,9 +55,11 @@ HOME_PATH=$(get_absolute_path "../")
 TEMPLATE_REPO_PATH=$(get_absolute_path "./")
 cd "$TEMPLATE_REPO_PATH"
 
+echo "gebin is here $HOME_PATH"
+echo "gebin is here ${HOME_PATH}/temp"
 
-mkdir "$HOMEPATH/temp"
-mkdir "$HOMEPATH/output"
+mkdir "$HOME_PATH/temp"
+mkdir "$HOME_PATH/output"
 
 
 # Loop through each tenant
