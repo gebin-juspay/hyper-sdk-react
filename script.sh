@@ -244,11 +244,11 @@ for tenant in $tenants; do
 
 
     function commit_and_push_changes() {
-        cd "$TARGET_REPO_PATH" || exit
-        if [ ! -d "./git" ]; then
-            echo "Initializing a fresh repo"
-            git init
-        fi
+        # cd "$TARGET_REPO_PATH" || exit
+        # if [ ! -d "./git" ]; then
+        #     echo "Initializing a fresh repo"
+        #     git init
+        # fi
         # Configure Git (adjust user details as needed)
         # git config user.name "Your Name"
         # git config user.email "your-email@example.com"
@@ -260,14 +260,14 @@ for tenant in $tenants; do
         git commit -m "$last_commit_message"
 
         echo "Pushing changes to the remote repository..."
-        git push -u origin main
+        git push -f -u origin main
     }
 
 
-    copy_contents
-    cd "$TEMPERORY_SDK_PATH"
-
-    rm -rf "./git"
+    # copy_contents
+    git checkout tenant-2
+    git branch -d $TARGET_REPO_PATH
+    git checkout -b $TARGET_REPO_PATH
 
     echo "Replacing '_juspay' with '$TENANT_ID' and '_Juspay' with '$classNamePrefix'... and sdk name is '$react_sdkName'"
 
@@ -348,17 +348,17 @@ for tenant in $tenants; do
 
 
     # Main script
-    check_repo_exists || create_repo
+    # check_repo_exists || create_repo
     if [ -d "$TARGET_REPO_PATH" ]; then
         echo "The directory '$TARGET_REPO_PATH' already exists."
         rm -rf $TARGET_REPO_PATH
     fi
 
-    clone_repo
-    move_contents
+    # clone_repo
+    # move_contents
     # replace_contents
-    # commit_and_push_changes
-    rm -rf "$TEMPERORY_SDK_PATH"
+    commit_and_push_changes
+    # rm -rf "$TEMPERORY_SDK_PATH"
 done
 
 
