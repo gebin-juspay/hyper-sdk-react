@@ -28,6 +28,36 @@ response=$(<tenant-configs.json)
 # Get a list of tenants (keys at the top level)
 tenants=$(echo "$response" | jq -r 'keys[]')
 
+get_absolute_path() {
+    local relative_path="$1"
+
+    if [ ! -d "$relative_path" ]; then
+        mkdir "$relative_path"
+    fi
+
+    if command -v realpath &> /dev/null; then
+        # Use realpath if available
+        absolute_path=$(realpath "$relative_path")
+    elif command -v readlink &> /dev/null; then
+        # Fallback to readlink if realpath is not available
+        absolute_path=$(readlink -f "$relative_path")
+    else
+        echo "Error: Neither 'realpath' nor 'readlink' is available."
+        exit 1
+    fi
+
+    echo "$absolute_path"
+}
+
+HOME_PATH=$(get_absolute_path "../")
+TEMPLATE_REPO_PATH=$(get_absolute_path "./")
+cd "$TEMPLATE_REPO_PATH"
+
+
+mkdir "$HOMEPATH/temp"
+mkdir "$HOMEPATH/output"
+
+
 # Loop through each tenant
 for tenant in $tenants; do
     echo "Processing tenant: $tenant"payments
@@ -63,36 +93,15 @@ for tenant in $tenants; do
 
     #!/bin/bash
 
-    get_absolute_path() {
-        local relative_path="$1"
 
-        if [ ! -d "$relative_path" ]; then
-            mkdir "$relative_path"
-        fi
-
-        if command -v realpath &> /dev/null; then
-            # Use realpath if available
-            absolute_path=$(realpath "$relative_path")
-        elif command -v readlink &> /dev/null; then
-            # Fallback to readlink if realpath is not available
-            absolute_path=$(readlink -f "$relative_path")
-        else
-            echo "Error: Neither 'realpath' nor 'readlink' is available."
-            exit 1
-        fi
-
-        echo "$absolute_path"
-    }
 
 
 
 
     # Variables
 
-    TEMPLATE_REPO_PATH=$(get_absolute_path "./")
-    HOME_PATH=$(get_absolute_path "../")
-    TEMPERORY_SDK_PATH=$(get_absolute_path "$HOME_PATH/temp-$react_sdkName")  # Directory with contents to move
-    TARGET_REPO_PATH=$(get_absolute_path "$HOME_PATH/$react_sdkName")     # Directory to move contents to
+    TEMPERORY_SDK_PATH=$(get_absolute_path "$HOME_PATH/temp/$react_sdkName")  # Directory with contents to move
+    TARGET_REPO_PATH=$(get_absolute_path "$HOME_PATH/output/$react_sdkName")     # Directory to move contents to
     REMOTE_URL="git@github.com:gebin-juspay/$react_sdkName.git"
     last_commit_message=$(git log -1 --pretty=%B)
 
@@ -105,6 +114,16 @@ for tenant in $tenants; do
     echo "gebin REMOTE_URL $REMOTE_URL"
     echo "gebin home $HOME_PATH"
 
+    rm -rf "$TEMPLATE_REPO_PATH"
+    mkdir "$TEMPLATE_REPO_PATH"
+    rm -rf "$TARGET_REPO_PATH"
+    mkdir "$TARGER_REPO_PATH"
+    cp -r "$TEMPLATE_REPO_PATH" "$TEMPERORY_SDK_PATH"
+    cp -r "$TEMPLATE_REPO_PATH" "$TARGET_REPO_PATH"
+    cd "$TARGER_REPO_PATH"
+
+
+    find . -mindepth 1 -not -name '.git' -exec rm -rf {} +
 
     copy_contents() {
         if [ ! -d "$TEMPLATE_REPO_PATH" ]; then
@@ -263,11 +282,12 @@ for tenant in $tenants; do
         git push -u origin main
     }
 
+    # rm -rf "./git"
 
-    copy_contents
-    cd "$TEMPERORY_SDK_PATH"
+    # copy_contents
+    # cd "$TEMPERORY_SDK_PATH"
 
-    rm -rf "./git"
+    # rm -rf "./git"
 
     echo "Replacing '_juspay' with '$TENANT_ID' and '_Juspay' with '$classNamePrefix'... and sdk name is '$react_sdkName'"
 
@@ -311,54 +331,54 @@ for tenant in $tenants; do
     }
 
 
-    echo "Renaming files starting with _Juspay..."
-    find . -type d \( -name node_modules \) -prune -o -type f -name '_Juspay*' -print | while IFS= read -r file; do
-        if [ -f "$file" ]; then
-            new_file=$(echo "$file" | sed "s/_Juspay/$classNamePrefix/")
-            if [ "$file" != "$new_file" ]; then
-                echo "Renaming '$file' to '$new_file'"
-                mv "$file" "$new_file"
-            fi
-        else
-            echo "File '$file' does not exist or is not a regular file."
-        fi
-    done
+    # echo "Renaming files starting with _Juspay..."
+    # find . -type d \( -name node_modules \) -prune -o -type f -name '_Juspay*' -print | while IFS= read -r file; do
+    #     if [ -f "$file" ]; then
+    #         new_file=$(echo "$file" | sed "s/_Juspay/$classNamePrefix/")
+    #         if [ "$file" != "$new_file" ]; then
+    #             echo "Renaming '$file' to '$new_file'"
+    #             mv "$file" "$new_file"
+    #         fi
+    #     else
+    #         echo "File '$file' does not exist or is not a regular file."
+    #     fi
+    # done
 
 
-    echo "Renaming files starting with _juspay-payment-sdk-react..."
-    find . -type d \( -name node_modules \) -prune -o -type f -name '_juspay-payment-sdk-react*' -print | while IFS= read -r file; do
-        if [ -f "$file" ]; then
-            new_file=$(echo "$file" | sed "s/_juspay-payment-sdk-react/$react_sdkName/")
-            if [ "$file" != "$new_file" ]; then
-                echo "Renaming '$file' to '$new_file'"
-                mv "$file" "$new_file"
-            fi
-        else
-            echo "File '$file' does not exist or is not a regular file."
-        fi
-    done
+    # echo "Renaming files starting with _juspay-payment-sdk-react..."
+    # find . -type d \( -name node_modules \) -prune -o -type f -name '_juspay-payment-sdk-react*' -print | while IFS= read -r file; do
+    #     if [ -f "$file" ]; then
+    #         new_file=$(echo "$file" | sed "s/_juspay-payment-sdk-react/$react_sdkName/")
+    #         if [ "$file" != "$new_file" ]; then
+    #             echo "Renaming '$file' to '$new_file'"
+    #             mv "$file" "$new_file"
+    #         fi
+    #     else
+    #         echo "File '$file' does not exist or is not a regular file."
+    #     fi
+    # done
 
-    echo "Replacement and renaming complete."
+    # echo "Replacement and renaming complete."
 
 
-    # Process specific file types
-    for ext in mm m kt java js tsx h md podspec json xml gradle podfilef; do
-        process_files "$ext"
-    done
+    # # Process specific file types
+    # for ext in mm m kt java js tsx h md podspec json xml gradle podfilef; do
+    #     process_files "$ext"
+    # done
 
 
     # Main script
-    check_repo_exists || create_repo
-    if [ -d "$TARGET_REPO_PATH" ]; then
-        echo "The directory '$TARGET_REPO_PATH' already exists."
-        rm -rf $TARGET_REPO_PATH
-    fi
+    # check_repo_exists || create_repo
+    # if [ -d "$TARGET_REPO_PATH" ]; then
+    #     echo "The directory '$TARGET_REPO_PATH' already exists."
+    #     rm -rf $TARGET_REPO_PATH
+    # fi
 
-    clone_repo
-    move_contents
+    # clone_repo
+    # move_contents
     # replace_contents
     # commit_and_push_changes
-    rm -rf "$TEMPERORY_SDK_PATH"
+    # rm -rf "$TEMPERORY_SDK_PATH"
 done
 
 
