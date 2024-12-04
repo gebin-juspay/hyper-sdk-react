@@ -13,7 +13,7 @@ npm install _juspay-payment-sdk-react
 Add following maven url in the allProjects > repositories section of root(top) build.gradle:
 
 ```groovy
-maven { url "https://maven.juspay.in/jp-build-packages/hyper-sdk/" }
+maven { url "https://public.releases.juspay.in/hyper-sdk/" }
 ```
 
 Add the clientId ext property in root(top) `build.gradle`:

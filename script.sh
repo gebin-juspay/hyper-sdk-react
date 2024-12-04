@@ -285,7 +285,7 @@ for tenant in $tenants; do
         git commit -m "$last_commit_message"
 
         echo "Pushing changes to the remote repository..."
-        git push --set-upstream origin $react_sdkName
+        git push -f --set-upstream origin $react_sdkName
     }
 
     # rm -rf "./git"
@@ -317,6 +317,7 @@ for tenant in $tenants; do
                 # fi
 
                 # Perform text replacements
+                sed -i.bak "s/public.releases.juspay.in/$tenantDomain/g" "$file"
                 sed -i.bak "s/_JuspayPayments/$classNamePrefix/g" "$file"
                 sed -i.bak "s/_JuspaySDKReact/$react_moduleName/g" "$file"
                 sed -i.bak "s/in._juspay_group_id/$android_pluginGroupId/g" "$file"
