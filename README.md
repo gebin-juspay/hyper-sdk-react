@@ -16,14 +16,14 @@ Add following maven url in the allProjects > repositories section of root(top) b
 maven { url "https://public.releases.juspay.in/hyper-sdk/" }
 ```
 
-Add the clientId ext property in root(top) `build.gradle`:
+Add the _juspayClientId ext property in root(top) `build.gradle`:
 
 ```groovy
 buildscript {
     ....
     ext {
         ....
-        clientId = "<clientId shared by Juspay team>"
+        _juspayClientId = "<clientId shared by Juspay team>"
         hyperSDKVersion = "2.1.25"
         ....
     }
