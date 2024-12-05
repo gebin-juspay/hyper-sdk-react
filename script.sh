@@ -325,7 +325,7 @@ for tenant in $tenants; do
                 sed -i.bak "s/_JuspayHyperEvent/$react_callbackEventName/g" "$file"
                 sed -i.bak "s/_JuspayHeader/${react_merchantViewPrefix}Header/g" "$file"
                 sed -i.bak "s/_JuspayFooter/${react_merchantViewPrefix}Footer/g" "$file"
-                sed -i.bak "s/juspayClientId/$react_clientIdHolder/g" "$file"
+                sed -i.bak "s/_juspayClientId/$react_clientIdHolder/g" "$file"
                 # sed -i.bak "s/https://public.releases.juspay.in/$tenantDomain/g" "$file"
                 sed -i.bak "s/_JuspayPayments/$classNamePrefix/g" "$file"
                 sed -i.bak "s/_JuspaySDKReact/$react_moduleName/g" "$file"

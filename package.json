@@ -42,7 +42,6 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/juspay/_juspay-payment-sdk-react",
   "author": "Harsh Garg <harsh.garg@juspay.in> (https://www.juspay.in)",
   "license": "AGPL-3.0-only",
   "bugs": {
