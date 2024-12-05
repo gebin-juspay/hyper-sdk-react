@@ -9,7 +9,7 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
-        classpath 'in._juspay_group_id:hypersdk.plugin:2.2.4'
+        classpath 'in._juspay_group_id:hypersdk.plugin:2.2.5'
     }
 }
 
@@ -91,7 +91,7 @@ static def mostRecentVersion(List<String> versions) {
 }
 
 static def getHyperSDKVersion(rootProject) {
-    def hyperSdkVersion = '2.1.33'
+    def hyperSdkVersion = '2.2.1-rc.19'
     if (!rootProject.hasProperty('hyperSDKVersion')) {
         return hyperSdkVersion
     }
@@ -111,10 +111,10 @@ static def getExcludedMicroSdks(rootProject) {
 }
 
 static def getClientId(rootProject) {
-    if (!rootProject.hasProperty('clientId')) {
-        throw new GradleException("clientId parameter is required in ext block of root build.gradle")
+    if (!rootProject.hasProperty('_juspayClientId')) {
+        throw new GradleException("_juspayClientId parameter is required in ext block of root build.gradle")
     }
-    return rootProject.clientId
+    return rootProject._juspayClientId
 }
 
 dependencies {
@@ -126,8 +126,8 @@ dependencies {
 }
 
 _juspaySdkPlugin {
-    clientId = 'sdktest'
-    sdkVersion = '2.2.0-xtest.14'
+    clientId = getClientId(rootProject)
+    sdkVersion = getHyperSDKVersion(rootProject)
 }
 
 // if(rootProject.hasProperty('hyperAssetVersion')) {

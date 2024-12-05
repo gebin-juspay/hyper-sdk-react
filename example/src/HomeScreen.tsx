@@ -79,7 +79,7 @@ class HomeScreen extends React.Component {
   componentDidMount() {
     const eventEmitter = new NativeEventEmitter(NativeModules._JuspaySDKReact);
     this.eventListener = eventEmitter.addListener(
-      _JuspaySDKReact.HyperEvent,
+      _JuspaySDKReact._JuspayHyperEvent,
       (resp) => {
         HyperUtils.alertCallbackResponse('HomeScreen', resp);
       }

@@ -43,7 +43,7 @@ if (Platform.OS === 'ios') {
 }
 
 type _JuspaySDKReactType = {
-  HyperEvent: string;
+  _JuspayHyperEvent: string;
   preFetch(data: string): void;
   createHyperServices(): void;
   initiate(data: string): void;
@@ -57,10 +57,10 @@ type _JuspaySDKReactType = {
   openPaymentPage(data: string): void;
   updateMerchantViewHeight(tag: string, height: number): void;
   notifyAboutRegisterComponent(tag: string): void;
-  JuspayHeader: string;
-  JuspayHeaderAttached: string;
-  JuspayFooter: string;
-  JuspayFooterAttached: string;
+  _JuspayHeader: string;
+  _JuspayHeaderAttached: string;
+  _JuspayFooter: string;
+  _JuspayFooterAttached: string;
 };
 
 export default _JuspaySDKReact as _JuspaySDKReactType;

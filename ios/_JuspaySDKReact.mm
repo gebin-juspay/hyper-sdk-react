@@ -102,14 +102,14 @@ NSMutableSet<NSString *> *registeredComponents = [[NSMutableSet alloc] init];
     // Create a SDKRootView so that we can attach width constraints once it is attached to it's parent
     RCTRootView *rrv = [SDKRootView alloc];
     NSString *moduleName = @"JP_003";
-    if ([viewType isEqual:@"HEADER"] && [registeredComponents containsObject:@"JuspayHeader"]) {
-        moduleName = @"JuspayHeader";
-    } else if ([viewType isEqual:@"HEADER_ATTACHED"] && [registeredComponents containsObject:@"JuspayHeaderAttached"]) {
-        moduleName = @"JuspayHeaderAttached";
-    } else if ([viewType isEqual:@"FOOTER"] && [registeredComponents containsObject:@"JuspayFooter"]) {
-        moduleName = @"JuspayFooter";
-    } else if ([viewType isEqual:@"FOOTER_ATTACHED"] && [registeredComponents containsObject:@"JuspayFooterAttached"]) {
-        moduleName = @"JuspayFooterAttached";
+    if ([viewType isEqual:@"HEADER"] && [registeredComponents containsObject:@"_JuspayHeader"]) {
+        moduleName = @"_JuspayHeader";
+    } else if ([viewType isEqual:@"HEADER_ATTACHED"] && [registeredComponents containsObject:@"_JuspayHeaderAttached"]) {
+        moduleName = @"_JuspayHeaderAttached";
+    } else if ([viewType isEqual:@"FOOTER"] && [registeredComponents containsObject:@"_JuspayFooter"]) {
+        moduleName = @"_JuspayFooter";
+    } else if ([viewType isEqual:@"FOOTER_ATTACHED"] && [registeredComponents containsObject:@"_JuspayFooterAttached"]) {
+        moduleName = @"_JuspayFooterAttached";
     }
 
     // Save a reference of the react root view
@@ -147,11 +147,11 @@ NSMutableSet<NSString *> *registeredComponents = [[NSMutableSet alloc] init];
 @implementation _JuspaySDKReact
 RCT_EXPORT_MODULE()
 
-NSString *HYPER_EVENT = @"HyperEvent";
-NSString *JUSPAY_HEADER = @"JuspayHeader";
-NSString *JUSPAY_FOOTER = @"JuspayFooter";
-NSString *JUSPAY_HEADER_ATTACHED = @"JuspayHeaderAttached";
-NSString *JUSPAY_FOOTER_ATTACHED = @"JuspayFooterAttached";
+NSString *HYPER_EVENT = @"_JuspayHyperEvent";
+NSString *JUSPAY_HEADER = @"_JuspayHeader";
+NSString *JUSPAY_FOOTER = @"_JuspayFooter";
+NSString *JUSPAY_HEADER_ATTACHED = @"_JuspayHeaderAttached";
+NSString *JUSPAY_FOOTER_ATTACHED = @"_JuspayFooterAttached";
 
 - (dispatch_queue_t)methodQueue{
     return dispatch_get_main_queue();
@@ -183,7 +183,7 @@ NSString *JUSPAY_FOOTER_ATTACHED = @"JuspayFooterAttached";
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"HyperEvent"];
+    return @[@"_JuspayHyperEvent"];
 }
 
 - (NSDictionary *)constantsToExport
@@ -244,19 +244,19 @@ RCT_EXPORT_METHOD(initiate:(NSString *)data) {
                 self.delegate = [[SdkDelegate alloc] initWithBridge:self.bridge];
                 [_hyperInstance setHyperDelegate: _delegate];
                 [_hyperInstance initiate:baseViewController payload:jsonData callback:^(NSDictionary<NSString *,id> * _Nullable data) {
-                    [weakSelf sendEventWithName:@"HyperEvent" body:[[self class] dictionaryToString:data]];
+                    [weakSelf sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
                 }];
             } else {
                 // Define proper error code and return proper error
-                // [self sendEventWithName:@"HyperEvent" body:[[self class] dictionaryToString:data]];
+                // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
             }
         } @catch (NSException *exception) {
             // Define proper error code and return proper error
-            // [self sendEventWithName:@"HyperEvent" body:[[self class] dictionaryToString:data]];
+            // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
         }
     } else {
         // Define proper error code and return proper error
-        // [self sendEventWithName:@"HyperEvent" body:[[self class] dictionaryToString:data]];
+        // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
     }
 }
 
@@ -280,15 +280,15 @@ RCT_EXPORT_METHOD(process:(NSString *)data) {
                 [self.hyperInstance process:jsonData];
             } else {
                 // Define proper error code and return proper error
-                // [self sendEventWithName:@"HyperEvent" body:[[self class] dictionaryToString:data]];
+                // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
             }
         } @catch (NSException *exception) {
             // Define proper error code and return proper error
-            // [self sendEventWithName:@"HyperEvent" body:[[self class] dictionaryToString:data]];
+            // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
         }
     } else {
         // Define proper error code and return proper error
-        // [self sendEventWithName:@"HyperEvent" body:[[self class] dictionaryToString:data]];
+        // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
     }
 }
 

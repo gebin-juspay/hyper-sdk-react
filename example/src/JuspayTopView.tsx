@@ -13,7 +13,7 @@ const JuspayTopView = () => {
       onLayout={(event) => {
         const { height, width } = event.nativeEvent.layout;
         console.log('image height', height, width);
-        _JuspaySDKReact.updateMerchantViewHeight('JuspayHeader', height);
+        _JuspaySDKReact.updateMerchantViewHeight('_JuspayHeader', height);
       }}
     >
       <Image source={require('../images/promotion.png')} style={styles.image} />

@@ -91,7 +91,7 @@ clientId = <clientId shared by Juspay Team>
 
 ```ts
 type _JuspaySDKReactType = {
-  HyperEvent: string;
+  _JuspayHyperEvent: string;
   preFetch(data: string): void;
   createHyperServices(): void;
   initiate(data: string): void;
@@ -167,7 +167,7 @@ _JuspaySDKReact.processWithActivity(JSON.stringify(processPayload));
 
 ### Step-4: Listen to events from HyperSDK
 
-`Hyper SDK` Native Module will be emitting all the relevant events to JS via `RCTDeviceEventEmitter` and JavaScript modules can then register to receive events by invoking `addListener` on the `NativeEventEmitter` class in the `componentDidMount()` method with the event name `'HyperEvent'` (You can use the `_JuspaySDKReact.HyperEvent` as well). The listener will return a `stringified JSON` response (`resp`).
+`Hyper SDK` Native Module will be emitting all the relevant events to JS via `RCTDeviceEventEmitter` and JavaScript modules can then register to receive events by invoking `addListener` on the `NativeEventEmitter` class in the `componentDidMount()` method with the event name `'_JuspayHyperEvent'` (You can use the `_JuspaySDKReact._JuspayHyperEvent` as well). The listener will return a `stringified JSON` response (`resp`).
 
 The following events should be handled here:
 
@@ -182,7 +182,7 @@ The following events should be handled here:
  componentDidMount() {
    ...
    const eventEmitter = new NativeEventEmitter(NativeModules._JuspaySDKReact);
-   this.eventListener = eventEmitter.addListener(_JuspaySDKReact.HyperEvent, (resp) => {
+   this.eventListener = eventEmitter.addListener(_JuspaySDKReact._JuspayHyperEvent, (resp) => {
      var data = JSON.parse(resp);
      var event: string = data.event || '';
      switch (event) {
@@ -301,15 +301,15 @@ _JuspaySDKReact.updateBaseViewController();
 
 This sections helps to attach custom views inside designated sections in the payment page. You will need to register the component to be attached under one of the following names, based on where the component is attached.
 
-1. JuspayHeaderAttached
-1. JuspayHeader
-1. JuspayFooter
-1. JuspayFooterAttached
+1. _JuspayHeaderAttached
+1. _JuspayHeader
+1. _JuspayFooter
+1. _JuspayFooterAttached
 
 You can follow the below syntax to attach the component.
 ```ts
-_JuspaySDKReact.notifyAboutRegisterComponent(_JuspaySDKReact.JuspayHeaderAttached)
-AppRegistry.registerComponent(_JuspaySDKReact.JuspayHeaderAttached, () => CustomComponent);
+_JuspaySDKReact.notifyAboutRegisterComponent(_JuspaySDKReact._JuspayHeaderAttached)
+AppRegistry.registerComponent(_JuspaySDKReact._JuspayHeaderAttached, () => CustomComponent);
 ```
 
 Please note component must be registered before calling process call of the sdk.
@@ -319,14 +319,14 @@ Therefore the component must fire `_JuspaySDKReact.updateMerchantViewHeight(<sec
 
 For example
 ```ts
-_JuspaySDKReact.updateMerchantViewHeight(_JuspaySDKReact.JuspayHeader, 200);
+_JuspaySDKReact.updateMerchantViewHeight(_JuspaySDKReact._JuspayHeader, 200);
 ```
 
 If your view dynamically computes height. Height can be obtained by adding the following property to the root of component registered
 ```ts
   onLayout={(event) => {
         const { height } = event.nativeEvent.layout;
-        _JuspaySDKReact.updateMerchantViewHeight(_JuspaySDKReact.JuspayHeader, height);
+        _JuspaySDKReact.updateMerchantViewHeight(_JuspaySDKReact._JuspayHeader, height);
       }}
 
 ```

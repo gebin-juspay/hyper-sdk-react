@@ -8,9 +8,9 @@ package in._juspay.hypersdkreact;
 
 public class MerchantViewConstants {
 
-    static final String JUSPAY_HEADER = "JuspayHeader"; // gebin to change
-    static final String JUSPAY_FOOTER = "JuspayFooter";
-    static final String JUSPAY_HEADER_ATTACHED = "JuspayHeaderAttached";
-    static final String JUSPAY_FOOTER_ATTACHED = "JuspayFooterAttached";
+    static final String JUSPAY_HEADER = "_JuspayHeader"; // gebin to change
+    static final String JUSPAY_FOOTER = "_JuspayFooter";
+    static final String JUSPAY_HEADER_ATTACHED = "_JuspayHeaderAttached";
+    static final String JUSPAY_FOOTER_ATTACHED = "_JuspayFooterAttached";
 
 }

@@ -55,7 +55,7 @@ import in._juspay._juspaywrappersdk._JuspayPaymentServices;
 @ReactModule(name = HyperSdkReactModule.NAME)
 public class HyperSdkReactModule extends ReactContextBaseJavaModule implements ActivityEventListener {
     static final String NAME = "_JuspaySDKReact";
-    private static final String HYPER_EVENT = "HyperEvent";
+    private static final String HYPER_EVENT = "_JuspayHyperEvent";
 
     @Nullable
     private ReactInstanceManager reactInstanceManager;

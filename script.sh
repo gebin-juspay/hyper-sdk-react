@@ -96,10 +96,13 @@ for tenant in $tenants; do
     react_callbackEventName=$(echo "$response" | jq -r ".${tenant}.react.callbackEventName")
     react_gitUrlRemote=$(echo "$response" | jq -r ".${tenant}.react.gitUrlRemote")
     react_moduleName=$(echo "$response" | jq -r ".${tenant}.react.moduleName")
+    react_merchantViewPrefix=$(echo "$response" | jq -r ".${tenant}.react.merchantViewPrefix")
+    react_clientIdHolder=$(echo "$response" | jq -r ".${tenant}.react.clientIdHolder")
+
 
     defaultClientId=$(echo "$response" | jq -r ".${tenant}.defaultClientId")
     classNamePrefix=$(echo "$response" | jq -r ".${tenant}.classNamePrefix")
-    tenantDomain=$(echo "$response" | jq -r ".${tenant}.tenantDomain")
+    tenantDomain=$(echo "$response" | jq -r ".${tenant}.tenantAssetsDomain")
 
     #!/bin/bash
 
@@ -317,16 +320,23 @@ for tenant in $tenants; do
                 # fi
 
                 # Perform text replacements
-                sed -i.bak "s/public.releases.juspay.in/$tenantDomain/g" "$file"
+
+                sed -i.bak "s|https://public.releases.juspay.in|$tenantDomain|g" "$file"
+                sed -i.bak "s/_JuspayHyperEvent/$react_callbackEventName/g" "$file"
+                sed -i.bak "s/_JuspayHeader/$react_merchantViewPrefix/g" "$file"
+                sed -i.bak "s/_JuspayFooter/$react_merchantViewPrefix/g" "$file"
+                sed -i.bak "s/juspayClientId/$react_clientIdHolder/g" "$file"
+                # sed -i.bak "s/https://public.releases.juspay.in/$tenantDomain/g" "$file"
                 sed -i.bak "s/_JuspayPayments/$classNamePrefix/g" "$file"
                 sed -i.bak "s/_JuspaySDKReact/$react_moduleName/g" "$file"
                 sed -i.bak "s/in._juspay_group_id/$android_pluginGroupId/g" "$file"
-                sed -i.bak "s/in._juspay/$android_packageName/g" "$file"
+                sed -i.bak "s/in._juspay._juspaywrappersdk/$android_packageName/g" "$file"
                 sed -i.bak "s/hypersdk.plugin/$android_pluginArtifactId/g" "$file"
                 sed -i.bak "s/_juspaySdkPlugin/$android_pluginName/g" "$file"
-                sed -i.bak "s/_juspaywrappersdk/$android_sdkName/g" "$file"
+                # sed -i.bak "s/_juspaywrappersdk/$android_sdkName/g" "$file"
                 sed -i.bak "s/_juspay-payment-sdk-react/$react_sdkName/g" "$file"
                 sed -i.bak "s/_juspay/$TENANT_ID/g" "$file"
+                sed -i.bak "s/_JuspayPayment/$classNamePrefix/g" "$file"
                 sed -i.bak "s/_Juspay/$classNamePrefix/g" "$file"
 
                 # Clean up backup files created by sed
