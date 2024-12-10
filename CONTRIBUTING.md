@@ -100,9 +100,9 @@ Remember to add tests for your change if possible. Run the unit tests by:
 yarn test
 ```
 
-To edit the Objective-C or Swift files, open `example/ios/HyperSdkReactExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > _juspay-payment-sdk-react`.
+To edit the Objective-C or Swift files, open `example/ios/HyperSdkReactExample.xcworkspace` in XCode and find the source files at `Pods > Development Pods > hsbc-payments-sdk-react`.
 
-To edit the Java or Kotlin files, open `example/android` in Android studio and find the source files at `_juspay-payment-sdk-react` under `Android`.
+To edit the Java or Kotlin files, open `example/android` in Android studio and find the source files at `hsbc-payments-sdk-react` under `Android`.
 
 
 ### Commit message convention

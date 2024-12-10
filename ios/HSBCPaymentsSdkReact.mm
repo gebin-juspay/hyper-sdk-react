@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-#import "_JuspaySDKReact.h"
+#import "HSBCPaymentsSdkReact.h"
 
 #import <Foundation/Foundation.h>
 
@@ -17,9 +17,9 @@
 #import <React/RCTModalHostViewController.h>
 #import <React/RCTRootView.h>
 
-#import <_JuspayPayments/_JuspayPaymentsServices.h>
+#import <HSBCPayment/HSBCPaymentsServices.h>
 
-__weak static _JuspayPaymentsServices *_hyperServicesReference;
+__weak static HSBCPaymentsServices *_hyperServicesReference;
 
 // Overriding the RCTRootView to add contraints to align with the views superview
 @implementation SDKRootView
@@ -102,14 +102,14 @@ NSMutableSet<NSString *> *registeredComponents = [[NSMutableSet alloc] init];
     // Create a SDKRootView so that we can attach width constraints once it is attached to it's parent
     RCTRootView *rrv = [SDKRootView alloc];
     NSString *moduleName = @"JP_003";
-    if ([viewType isEqual:@"HEADER"] && [registeredComponents containsObject:@"_JuspayHeader"]) {
-        moduleName = @"_JuspayHeader";
-    } else if ([viewType isEqual:@"HEADER_ATTACHED"] && [registeredComponents containsObject:@"_JuspayHeaderAttached"]) {
-        moduleName = @"_JuspayHeaderAttached";
-    } else if ([viewType isEqual:@"FOOTER"] && [registeredComponents containsObject:@"_JuspayFooter"]) {
-        moduleName = @"_JuspayFooter";
-    } else if ([viewType isEqual:@"FOOTER_ATTACHED"] && [registeredComponents containsObject:@"_JuspayFooterAttached"]) {
-        moduleName = @"_JuspayFooterAttached";
+    if ([viewType isEqual:@"HEADER"] && [registeredComponents containsObject:@"HSBCHeader"]) {
+        moduleName = @"HSBCHeader";
+    } else if ([viewType isEqual:@"HEADER_ATTACHED"] && [registeredComponents containsObject:@"HSBCHeaderAttached"]) {
+        moduleName = @"HSBCHeaderAttached";
+    } else if ([viewType isEqual:@"FOOTER"] && [registeredComponents containsObject:@"HSBCFooter"]) {
+        moduleName = @"HSBCFooter";
+    } else if ([viewType isEqual:@"FOOTER_ATTACHED"] && [registeredComponents containsObject:@"HSBCFooterAttached"]) {
+        moduleName = @"HSBCFooterAttached";
     }
 
     // Save a reference of the react root view
@@ -144,14 +144,14 @@ NSMutableSet<NSString *> *registeredComponents = [[NSMutableSet alloc] init];
 
 @end
 
-@implementation _JuspaySDKReact
+@implementation HSBCPaymentsSdkReact
 RCT_EXPORT_MODULE()
 
-NSString *HYPER_EVENT = @"_JuspayHyperEvent";
-NSString *JUSPAY_HEADER = @"_JuspayHeader";
-NSString *JUSPAY_FOOTER = @"_JuspayFooter";
-NSString *JUSPAY_HEADER_ATTACHED = @"_JuspayHeaderAttached";
-NSString *JUSPAY_FOOTER_ATTACHED = @"_JuspayFooterAttached";
+NSString *HYPER_EVENT = @"HSBCPaymentsEvent";
+NSString *JUSPAY_HEADER = @"HSBCHeader";
+NSString *JUSPAY_FOOTER = @"HSBCFooter";
+NSString *JUSPAY_HEADER_ATTACHED = @"HSBCHeaderAttached";
+NSString *JUSPAY_FOOTER_ATTACHED = @"HSBCFooterAttached";
 
 - (dispatch_queue_t)methodQueue{
     return dispatch_get_main_queue();
@@ -160,20 +160,20 @@ NSString *JUSPAY_FOOTER_ATTACHED = @"_JuspayFooterAttached";
 
 - (void) createPaymentServices:(NSString*) clientId {
     if (self.hyperInstance == NULL) {
-        self.hyperInstance = [[_JuspayPaymentServices alloc] initWithClientId:clientId];
+        self.hyperInstance = [[HSBCPaymentsServices alloc] initWithClientId:clientId];
         _hyperServicesReference = self.hyperInstance;
     }
 }
 
 - (NSString*) getClientId:(NSDictionary*)data {
-    if(data == nil || data["payload"] == nil) {
+    if(data == nil || data[@"payload"] == nil) {
         return nil;
     }
-    if(data["clientId"]) {
-        return data["clientId"];
+    if(data[@"clientId"]) {
+        return data[@"clientId"];
     }
-    if(data["client_id"]) {
-        return data["client_id"];
+    if(data[@"client_id"]) {
+        return data[@"client_id"];
     }
     return nil;
 }
@@ -183,7 +183,7 @@ NSString *JUSPAY_FOOTER_ATTACHED = @"_JuspayFooterAttached";
 }
 
 - (NSArray<NSString *> *)supportedEvents {
-    return @[@"_JuspayHyperEvent"];
+    return @[@"HSBCPaymentsEvent"];
 }
 
 - (NSDictionary *)constantsToExport
@@ -209,9 +209,9 @@ NSString *JUSPAY_FOOTER_ATTACHED = @"_JuspayFooterAttached";
 RCT_EXPORT_METHOD(preFetch:(NSString *)data) {
     if (data && data.length>0) {
         @try {
-            NSDictionary *jsonData = [_JuspaySDKReact stringToDictionary:data];
+            NSDictionary *jsonData = [HSBCPaymentsSdkReact stringToDictionary:data];
             if (jsonData && [jsonData isKindOfClass:[NSDictionary class]] && jsonData.allKeys.count>0) {
-                [_JuspayPaymentsServices preFetch:jsonData];
+                // [HSBCPaymentsServices preFetch:jsonData];
             } else {
 
             }
@@ -225,14 +225,14 @@ RCT_EXPORT_METHOD(createHyperServices) {
 
 }
 
-RCT_EXPORT_METHOD(create_JuspayPaymentServices:(NSString*) clientId) {
+RCT_EXPORT_METHOD(createHSBCPaymentsServices:(NSString*) clientId) {
     [self createPaymentServices:clientId];
 }
 
 RCT_EXPORT_METHOD(initiate:(NSString *)data) {
     if (data && data.length>0) {
         @try {
-            NSDictionary *jsonData = [_JuspaySDKReact stringToDictionary:data];
+            NSDictionary *jsonData = [HSBCPaymentsSdkReact stringToDictionary:data];
             if (jsonData && [jsonData isKindOfClass:[NSDictionary class]] && jsonData.allKeys.count>0) {
                 NSString *clientId = [self getClientId:jsonData];
                 if(clientId == nil) {
@@ -240,30 +240,30 @@ RCT_EXPORT_METHOD(initiate:(NSString *)data) {
                 }
                 [self createPaymentServices:clientId];
                 UIViewController *baseViewController = RCTPresentedViewController();
-                __weak _JuspaySDKReact *weakSelf = self;
+                __weak HSBCPaymentsSdkReact *weakSelf = self;
                 self.delegate = [[SdkDelegate alloc] initWithBridge:self.bridge];
                 [_hyperInstance setHyperDelegate: _delegate];
                 [_hyperInstance initiate:baseViewController payload:jsonData callback:^(NSDictionary<NSString *,id> * _Nullable data) {
-                    [weakSelf sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
+                    [weakSelf sendEventWithName:@"HSBCPaymentsEvent" body:[[self class] dictionaryToString:data]];
                 }];
             } else {
                 // Define proper error code and return proper error
-                // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
+                // [self sendEventWithName:@"HSBCPaymentsEvent" body:[[self class] dictionaryToString:data]];
             }
         } @catch (NSException *exception) {
             // Define proper error code and return proper error
-            // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
+            // [self sendEventWithName:@"HSBCPaymentsEvent" body:[[self class] dictionaryToString:data]];
         }
     } else {
         // Define proper error code and return proper error
-        // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
+        // [self sendEventWithName:@"HSBCPaymentsEvent" body:[[self class] dictionaryToString:data]];
     }
 }
 
 RCT_EXPORT_METHOD(process:(NSString *)data) {
     if (data && data.length>0) {
         @try {
-            NSDictionary *jsonData = [_JuspaySDKReact stringToDictionary:data];
+            NSDictionary *jsonData = [HSBCPaymentsSdkReact stringToDictionary:data];
             // Update baseViewController if it's nil or not in the view hierarchy.
             if (self.hyperInstance.baseViewController == nil || self.hyperInstance.baseViewController.view.window == nil) {
                 // Getting topViewController
@@ -280,15 +280,15 @@ RCT_EXPORT_METHOD(process:(NSString *)data) {
                 [self.hyperInstance process:jsonData];
             } else {
                 // Define proper error code and return proper error
-                // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
+                // [self sendEventWithName:@"HSBCPaymentsEvent" body:[[self class] dictionaryToString:data]];
             }
         } @catch (NSException *exception) {
             // Define proper error code and return proper error
-            // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
+            // [self sendEventWithName:@"HSBCPaymentsEvent" body:[[self class] dictionaryToString:data]];
         }
     } else {
         // Define proper error code and return proper error
-        // [self sendEventWithName:@"_JuspayHyperEvent" body:[[self class] dictionaryToString:data]];
+        // [self sendEventWithName:@"HSBCPaymentsEvent" body:[[self class] dictionaryToString:data]];
     }
 }
 
@@ -365,10 +365,10 @@ RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(process:(nonnull NSNumber *)viewTag nameSpace:(NSString *)nameSpace payload:(NSString *)payload)
 {
-    _JuspayPaymentsServices *hyperServicesInstance = _hyperServicesReference;
+    HSBCPaymentsServices *hyperServicesInstance = _hyperServicesReference;
     if (payload && payload.length>0) {
         @try {
-            NSDictionary *jsonData = [HyperSdkReact stringToDictionary:payload];
+            NSDictionary *jsonData = [HSBCPaymentsSdkReact stringToDictionary:payload];
             if (jsonData && [jsonData isKindOfClass:[NSDictionary class]] && jsonData.allKeys.count>0) {
                 [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
                     if (hyperServicesInstance.baseViewController == nil || hyperServicesInstance.baseViewController.view.window == nil) {

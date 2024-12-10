@@ -3,19 +3,19 @@ import App from './src/App';
 import JuspayTopView from './src/JuspayTopView';
 import JuspayTopViewAttached from './src/JuspayTopViewAttached';
 import { name as appName } from './app.json';
-import _JuspaySDKReact from '_juspay-payment-sdk-react';
+import HSBCPaymentsSdkReact from 'hsbc-payments-sdk-react';
 
 AppRegistry.registerComponent(appName, () => App);
 
-_JuspaySDKReact.notifyAboutRegisterComponent(
-  _JuspaySDKReact._JuspayHeaderAttached
+HSBCPaymentsSdkReact.notifyAboutRegisterComponent(
+  HSBCPaymentsSdkReact.HSBCHeaderAttached
 );
 AppRegistry.registerComponent(
-  _JuspaySDKReact._JuspayHeaderAttached,
+  HSBCPaymentsSdkReact.HSBCHeaderAttached,
   () => JuspayTopViewAttached
 );
-_JuspaySDKReact.notifyAboutRegisterComponent(_JuspaySDKReact._JuspayHeader);
+HSBCPaymentsSdkReact.notifyAboutRegisterComponent(HSBCPaymentsSdkReact.HSBCHeader);
 AppRegistry.registerComponent(
-  _JuspaySDKReact._JuspayHeader,
+  HSBCPaymentsSdkReact.HSBCHeader,
   () => JuspayTopView
 );

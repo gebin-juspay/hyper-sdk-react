@@ -9,17 +9,17 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventEmitter.h>
-#import <_JuspayPayments/_JuspayPaymentServices.h>
+#import <LatamJuspayPayments/LatamJuspayPaymentsServices.h>
 #import <React/RCTRootView.h>
 #import <React/RCTViewManager.h>
 
-@interface _JuspaySDKReact : RCTEventEmitter <RCTBridgeModule>
-@property _JuspayPaymentServices *hyperInstance;
-@property id <_JuspayDelegate> delegate;
+@interface LatamJuspayPaymentsSdkReact : RCTEventEmitter <RCTBridgeModule>
+@property LatamJuspayPaymentsServices *hyperInstance;
+@property id <LatamJuspayPaymentsDelegate> delegate;
 
 @end
 
-@interface SdkDelegate : NSObject <_JuspayDelegate>
+@interface SdkDelegate : NSObject <LatamJuspayPaymentsDelegate>
 @property (nonatomic, strong) NSMutableDictionary *rootHolder;
 @property (nonatomic, strong) NSMutableDictionary *heightHolder;
 @property (nonatomic, strong) NSMutableDictionary *heightConstraintHolder;

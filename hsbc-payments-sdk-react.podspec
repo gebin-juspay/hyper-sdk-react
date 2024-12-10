@@ -3,7 +3,7 @@ require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
-hyper_sdk_version = "2.2.1.4"
+hyper_sdk_version = "2.2.1.14"
 
 begin
   package_json_path = File.expand_path(File.join(__dir__, "../../package.json"))
@@ -22,7 +22,7 @@ end
 puts ("HyperSDK Version: #{hyper_sdk_version}")
 
 Pod::Spec.new do |s|
-  s.name         = "_juspay-payment-sdk-react"
+  s.name         = "hsbc-payments-sdk-react"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]
@@ -37,5 +37,5 @@ Pod::Spec.new do |s|
   s.source_files = "ios/**/*.{h,m,mm,swift}"
 
   s.dependency "React-Core"
-  s.dependency "_JuspayPayments", '0.0.4'
+  s.dependency "HyperSDK", hyper_sdk_version
 end

@@ -44,7 +44,7 @@ target 'HyperSdkReactExample' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  pod '_JuspayPayments', :git => 'https://github.com/balaganesh-juspay/juspay-wrapper-test.git', :tag => 'v0.0.4'
+  pod 'HSBCPayments', :podspec => 'https://api.dms.gbm.hsbc.com/hyper/bundles/in.juspay.merchants/juspaymigration/ios/release/2.2.1.14/sdk_build_config.podspec'
 
   target 'HyperSdkReactExampleTests' do
     inherit! :complete

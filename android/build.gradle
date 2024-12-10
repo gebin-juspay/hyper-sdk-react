@@ -4,12 +4,12 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://public.releases.juspay.in/hyper-sdk/" }
+        maven { url "https://api.dms.gbm.hsbc.com/hyper-sdk/" }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
-        classpath 'in._juspay_group_id:hypersdk.plugin:2.2.5'
+        classpath 'com.hsbc:hsbcpaymentssdk.plugin:2.2.5'
     }
 }
 
@@ -18,7 +18,7 @@ def isNewArchitectureEnabled() {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'hypersdk.plugin'
+apply plugin: 'hsbcpaymentssdk.plugin'
 
 
 def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
@@ -75,8 +75,8 @@ repositories {
 if (isNewArchitectureEnabled()) {
     react {
         jsRootDir = file("../src/")
-        libraryName = "_JuspaySDKReact"
-        codegenJavaPackageName = "in._juspay"
+        libraryName = "HSBCPaymentsSdkReact"
+        codegenJavaPackageName = "in.hsbc_hk"
     }
 }
 
@@ -111,10 +111,10 @@ static def getExcludedMicroSdks(rootProject) {
 }
 
 static def getClientId(rootProject) {
-    if (!rootProject.hasProperty('_juspayClientId')) {
-        throw new GradleException("_juspayClientId parameter is required in ext block of root build.gradle")
+    if (!rootProject.hasProperty('hsbcPaymentsClientId')) {
+        throw new GradleException("hsbcPaymentsClientId parameter is required in ext block of root build.gradle")
     }
-    return rootProject._juspayClientId
+    return rootProject.hsbcPaymentsClientId
 }
 
 dependencies {
@@ -125,7 +125,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
 }
 
-_juspaySdkPlugin {
+hsbcPaymentsSdkPlugin {
     clientId = getClientId(rootProject)
     sdkVersion = getHyperSDKVersion(rootProject)
 }

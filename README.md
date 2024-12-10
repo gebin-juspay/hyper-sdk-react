@@ -1,11 +1,11 @@
-# _juspay-payment-sdk-react
+# hsbc-payments-sdk-react
 
 React native module for HyperSDK which enables payment orchestration via different dynamic modules. More details available at Juspay Developer Docs for [Express Checkout SDK](https://developer.juspay.in/v2.0/docs/introduction) and [Payment Page SDK](https://developer.juspay.in/v4.0/docs/introduction). Some part of module depends heavily on native functionalities are not updatable dynamically.
 
 ## Installation
 
 ```sh
-npm install _juspay-payment-sdk-react
+npm install hsbc-payments-sdk-react
 ```
 
 ### Android
@@ -13,17 +13,17 @@ npm install _juspay-payment-sdk-react
 Add following maven url in the allProjects > repositories section of root(top) build.gradle:
 
 ```groovy
-maven { url "https://public.releases.juspay.in/hyper-sdk/" }
+maven { url "https://api.dms.gbm.hsbc.com/hyper-sdk/" }
 ```
 
-Add the _juspayClientId ext property in root(top) `build.gradle`:
+Add the hsbcPaymentsClientId ext property in root(top) `build.gradle`:
 
 ```groovy
 buildscript {
     ....
     ext {
         ....
-        _juspayClientId = "<clientId shared by Juspay team>"
+        hsbcPaymentsClientId = "<clientId shared by Juspay team>"
         hyperSDKVersion = "2.1.25"
         ....
     }
@@ -70,7 +70,7 @@ Add below post_install script in the Podfile
 
 ```sh
 post_install do |installer|
- fuse_path = "./Pods/_JuspayPayments/Fuse.rb"
+ fuse_path = "./Pods/HSBCPayments/Fuse.rb"
  clean_assets = false # Pass true to re-download all the assets
  if File.exist?(fuse_path)
    if system("ruby", fuse_path.to_s, clean_assets.to_s)
@@ -90,8 +90,8 @@ clientId = <clientId shared by Juspay Team>
 ### Exposed APIs
 
 ```ts
-type _JuspaySDKReactType = {
-  _JuspayHyperEvent: string;
+type HSBCPaymentsSdkReactType = {
+  HSBCPaymentsEvent: string;
   preFetch(data: string): void;
   createHyperServices(): void;
   initiate(data: string): void;
@@ -104,15 +104,15 @@ type _JuspaySDKReactType = {
   updateBaseViewController(): void;
 };
 
-const { _JuspaySDKReact } = NativeModules;
+const { HSBCPaymentsSdkReact } = NativeModules;
 
-export default _JuspaySDKReact as _JuspaySDKReactType;
+export default HSBCPaymentsSdkReact as HSBCPaymentsSdkReactType;
 ```
 
 ### Import HyperSDK
 
 ```ts
-import _JuspaySDKReact from '_juspay-payment-sdk-react';
+import HSBCPaymentsSdkReact from 'hsbc-payments-sdk-react';
 ```
 
 ### Step-0: PreFetch
@@ -120,7 +120,7 @@ import _JuspaySDKReact from '_juspay-payment-sdk-react';
 To keep the SDK up to date with the latest changes, it is highly recommended to call `preFetch` as early as possible. It takes a `stringified JSON` as its argument.
 
 ```ts
-_JuspaySDKReact.preFetch(JSON.stringify(preFetchPayload));
+HSBCPaymentsSdkReact.preFetch(JSON.stringify(preFetchPayload));
 ```
 
 ### Step-1: Create HyperServices Object
@@ -130,7 +130,7 @@ This method creates an instance of `HyperServices` class in the React Bridge Mod
 **Note**: This method is mandatory and is required to call any other subsequent methods from `HyperSDK`.
 
 ```ts
-_JuspaySDKReact.createHyperServices();
+HSBCPaymentsSdkReact.createHyperServices();
 ```
 
 ### Step-2: Initiate
@@ -142,7 +142,7 @@ Initiate is an asynchronous call and its result (whether success or failure) is 
 **Note**: It is highly recommended to initiate SDK from the order summary page (at least 5 seconds before opening your payment page) for seamless user experience.
 
 ```ts
-_JuspaySDKReact.initiate(JSON.stringify(initiatePayload));
+HSBCPaymentsSdkReact.initiate(JSON.stringify(initiatePayload));
 ```
 
 ### Step-3: Process
@@ -156,18 +156,18 @@ This API should be triggered for all operations required from `HyperSDK`. The op
 The result of the process call is provided in the `Hyper Event listener`, later discussed in [step-4](#step-4-listen-to-events-from-hypersdk).
 
 ```ts
-_JuspaySDKReact.process(JSON.stringify(processPayload));
+HSBCPaymentsSdkReact.process(JSON.stringify(processPayload));
 ```
 
 If any of the react-native library is impacting the UI/UX, please use `processWithActivity` instead, which starts a new Activity for opening the Payment Page, isolated of react native.
 
 ```ts
-_JuspaySDKReact.processWithActivity(JSON.stringify(processPayload));
+HSBCPaymentsSdkReact.processWithActivity(JSON.stringify(processPayload));
 ```
 
 ### Step-4: Listen to events from HyperSDK
 
-`Hyper SDK` Native Module will be emitting all the relevant events to JS via `RCTDeviceEventEmitter` and JavaScript modules can then register to receive events by invoking `addListener` on the `NativeEventEmitter` class in the `componentDidMount()` method with the event name `'_JuspayHyperEvent'` (You can use the `_JuspaySDKReact._JuspayHyperEvent` as well). The listener will return a `stringified JSON` response (`resp`).
+`Hyper SDK` Native Module will be emitting all the relevant events to JS via `RCTDeviceEventEmitter` and JavaScript modules can then register to receive events by invoking `addListener` on the `NativeEventEmitter` class in the `componentDidMount()` method with the event name `'HSBCPaymentsEvent'` (You can use the `HSBCPaymentsSdkReact.HSBCPaymentsEvent` as well). The listener will return a `stringified JSON` response (`resp`).
 
 The following events should be handled here:
 
@@ -181,8 +181,8 @@ The following events should be handled here:
 ```ts
  componentDidMount() {
    ...
-   const eventEmitter = new NativeEventEmitter(NativeModules._JuspaySDKReact);
-   this.eventListener = eventEmitter.addListener(_JuspaySDKReact._JuspayHyperEvent, (resp) => {
+   const eventEmitter = new NativeEventEmitter(NativeModules.HSBCPaymentsSdkReact);
+   this.eventListener = eventEmitter.addListener(HSBCPaymentsSdkReact.HSBCPaymentsEvent, (resp) => {
      var data = JSON.parse(resp);
      var event: string = data.event || '';
      switch (event) {
@@ -227,15 +227,15 @@ The following events should be handled here:
 
 `Hyper SDK` internally uses an android fragment for opening the bank page and will need the control to hardware back press when the bank page is active. This can be done by invoking `addEventListener` on the `BackHandler` provided by React-Native.
 
-If the blocking asynchronous call `_JuspaySDKReact.onBackPressed()` returns true, `Hyper SDK` will handle the back press, else merchant can handle it.
+If the blocking asynchronous call `HSBCPaymentsSdkReact.onBackPressed()` returns true, `Hyper SDK` will handle the back press, else merchant can handle it.
 
-**Note**: `_JuspaySDKReact.isNull()` (refer [here](#helper-is-null)) can also be called before calling `onBackPressed()` to ensure that the HyperServices object is not null.
+**Note**: `HSBCPaymentsSdkReact.isNull()` (refer [here](#helper-is-null)) can also be called before calling `onBackPressed()` to ensure that the HyperServices object is not null.
 
 ```ts
  componentDidMount() {
    ...
    BackHandler.addEventListener('hardwareBackPress', () => {
-     return !_JuspaySDKReact.isNull() && _JuspaySDKReact.onBackPressed();
+     return !HSBCPaymentsSdkReact.isNull() && HSBCPaymentsSdkReact.onBackPressed();
    });
    ...
  }
@@ -267,7 +267,7 @@ Hyper SDK needs to listen to the response of permissions asked to the user for h
 This method shall be triggered when `HyperSDK` is no longer required.
 
 ```ts
-_JuspaySDKReact.terminate();
+HSBCPaymentsSdkReact.terminate();
 ```
 
 ### Helper: Is Null
@@ -275,7 +275,7 @@ _JuspaySDKReact.terminate();
 This is a helper method and can be used to check whether the `HyperServices` object is `null` at any particular moment. It is a blocking synchronous method and returns a `boolean` value.
 
 ```ts
-var isNull: boolean = _JuspaySDKReact.isNull();
+var isNull: boolean = HSBCPaymentsSdkReact.isNull();
 console.log('is HyperSDK null: ', isNull);
 ```
 
@@ -284,49 +284,49 @@ console.log('is HyperSDK null: ', isNull);
 This is a helper / optional method to check whether SDK has been initialised after [step-2](#step-2-initiate). It returns a `JS Promise` with a `boolean` value.
 
 ```ts
-_JuspaySDKReact.isInitialised().then((init: boolean) => {
+HSBCPaymentsSdkReact.isInitialised().then((init: boolean) => {
   console.log('isInitialised:', init);
 });
 ```
 
 ### Optional: Update Base ViewController - Only for iOS
 
-This is an optional method to update the base view controller in case if any new view controller is presented over top view controller after the SDK initiation. This method should be called before making `_JuspaySDKReact.process()` call.
+This is an optional method to update the base view controller in case if any new view controller is presented over top view controller after the SDK initiation. This method should be called before making `HSBCPaymentsSdkReact.process()` call.
 
 ```ts
-_JuspaySDKReact.updateBaseViewController();
+HSBCPaymentsSdkReact.updateBaseViewController();
 ```
 
 ### Optional: Support for adding merchant views
 
 This sections helps to attach custom views inside designated sections in the payment page. You will need to register the component to be attached under one of the following names, based on where the component is attached.
 
-1. _JuspayHeaderAttached
-1. _JuspayHeader
-1. _JuspayFooter
-1. _JuspayFooterAttached
+1. HSBCHeaderAttached
+1. HSBCHeader
+1. HSBCFooter
+1. HSBCFooterAttached
 
 You can follow the below syntax to attach the component.
 ```ts
-_JuspaySDKReact.notifyAboutRegisterComponent(_JuspaySDKReact._JuspayHeaderAttached)
-AppRegistry.registerComponent(_JuspaySDKReact._JuspayHeaderAttached, () => CustomComponent);
+HSBCPaymentsSdkReact.notifyAboutRegisterComponent(HSBCPaymentsSdkReact.HSBCHeaderAttached)
+AppRegistry.registerComponent(HSBCPaymentsSdkReact.HSBCHeaderAttached, () => CustomComponent);
 ```
 
 Please note component must be registered before calling process call of the sdk.
 
 Note: In iOS we are not able to infer the height of the component being rendered.
-Therefore the component must fire `_JuspaySDKReact.updateMerchantViewHeight(<section_name>, <height>);`
+Therefore the component must fire `HSBCPaymentsSdkReact.updateMerchantViewHeight(<section_name>, <height>);`
 
 For example
 ```ts
-_JuspaySDKReact.updateMerchantViewHeight(_JuspaySDKReact._JuspayHeader, 200);
+HSBCPaymentsSdkReact.updateMerchantViewHeight(HSBCPaymentsSdkReact.HSBCHeader, 200);
 ```
 
 If your view dynamically computes height. Height can be obtained by adding the following property to the root of component registered
 ```ts
   onLayout={(event) => {
         const { height } = event.nativeEvent.layout;
-        _JuspaySDKReact.updateMerchantViewHeight(_JuspaySDKReact._JuspayHeader, height);
+        HSBCPaymentsSdkReact.updateMerchantViewHeight(HSBCPaymentsSdkReact.HSBCHeader, height);
       }}
 
 ```
@@ -341,5 +341,5 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 
 ## License
 
-_juspay-payment-sdk-react is distributed under [AGPL-3.0-only](https://github.com/juspay/_juspay-payment-sdk-react/src/main/LICENSE.md) license.
+hsbc-payments-sdk-react is distributed under [AGPL-3.0-only](https://github.com/juspay/hsbc-payments-sdk-react/src/main/LICENSE.md) license.
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { getOrderDetails } from './DataStore';
 import { Dimensions, Image, StyleSheet, View } from 'react-native';
-import _JuspaySDKReact from '_juspay-payment-sdk-react';
+import HSBCPaymentsSdkReact from 'hsbc-payments-sdk-react';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -13,7 +13,7 @@ const JuspayTopView = () => {
       onLayout={(event) => {
         const { height, width } = event.nativeEvent.layout;
         console.log('image height', height, width);
-        _JuspaySDKReact.updateMerchantViewHeight('_JuspayHeader', height);
+        HSBCPaymentsSdkReact.updateMerchantViewHeight('HSBCHeader', height);
       }}
     >
       <Image source={require('../images/promotion.png')} style={styles.image} />

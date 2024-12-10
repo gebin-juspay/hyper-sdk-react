@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package in._juspay.hypersdkreact;
+package in.hsbc_hk.hypersdkreact;
 
 import android.app.Activity;
 import android.app.Application;
@@ -40,11 +40,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import in._juspay._juspaywrappersdk._JuspayPaymentsCheckoutLite;
-import in._juspay._juspaywrappersdk._JuspayMerchantViewType;
+import com.hsbc.payments.HSBCPaymentsCheckoutLite;
+import com.hsbc.payments.HSBCPaymentsMerchantViewType;
 import in.juspay.hypersdk.core.SdkTracker;
-import in._juspay._juspaywrappersdk._JuspayPaymentsCallbackAdapter;
-import in._juspay._juspaywrappersdk._JuspayPaymentServices;
+import com.hsbc.payments.HSBCPaymentsCallbackAdapter;
+import com.hsbc.payments.HSBCPaymentsServices;
 
 
 /**
@@ -54,8 +54,8 @@ import in._juspay._juspaywrappersdk._JuspayPaymentServices;
  */
 @ReactModule(name = HyperSdkReactModule.NAME)
 public class HyperSdkReactModule extends ReactContextBaseJavaModule implements ActivityEventListener {
-    static final String NAME = "_JuspaySDKReact";
-    private static final String HYPER_EVENT = "_JuspayHyperEvent";
+    static final String NAME = "HSBCPaymentsSdkReact";
+    private static final String HYPER_EVENT = "HSBCPaymentsEvent";
 
     @Nullable
     private ReactInstanceManager reactInstanceManager;
@@ -71,9 +71,9 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     private static final ActivityResultDelegate activityResultDelegate = new ActivityResultDelegate();
 
     @Nullable
-    private _JuspayPaymentServices hyperServices;
+    private HSBCPaymentsServices hyperServices;
 
-    private static WeakReference<_JuspayPaymentServices> hyperServicesReference = new WeakReference<>(null);
+    private static WeakReference<HSBCPaymentsServices> hyperServicesReference = new WeakReference<>(null);
 
     private final ReactApplicationContext context;
 
@@ -175,7 +175,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     }
 
     @Nullable
-    public static _JuspayPaymentServices getHyperServices() {
+    public static HSBCPaymentsServices getHyperServices() {
         return hyperServicesReference.get();
     }
 
@@ -183,7 +183,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     public void preFetch(String data) {
         try {
             JSONObject payload = new JSONObject(data);
-            _JuspayPaymentServices.preFetch(getReactApplicationContext(), payload);
+            HSBCPaymentsServices.preFetch(getReactApplicationContext(), payload);
         } catch (JSONException e) {
             SdkTracker.trackAndLogBootException(
                     NAME,
@@ -218,7 +218,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     }
 
     @ReactMethod
-    public void create_JuspayPaymentServicesWithClientId(String clientId) {
+    public void createHSBCPaymentsServicesWithClientId(String clientId) {
         synchronized (lock) {
             FragmentActivity activity = (FragmentActivity) getCurrentActivity();
 
@@ -245,7 +245,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                 return;
             }
 
-            hyperServices = new _JuspayPaymentServices(activity,clientId); // gebin hardcode tenentParamsHere
+            hyperServices = new HSBCPaymentsServices(activity,clientId); // gebin hardcode tenentParamsHere
             hyperServicesReference = new WeakReference<>(hyperServices);
 
             requestPermissionsResultDelegate.set(hyperServices);
@@ -288,7 +288,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                             "client id is null");
                         return;
                     }
-                    create_JuspayPaymentServicesWithClientId(clientId);
+                    createHSBCPaymentsServicesWithClientId(clientId);
                     if(hyperServices == null) {
                         SdkTracker.trackBootLifecycle(
                             LogConstants.SUBCATEGORY_HYPER_SDK,
@@ -301,7 +301,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
                 }
 
-                hyperServices.initiate(activity, payload, new _JuspayPaymentsCallbackAdapter() {
+                hyperServices.initiate(activity, payload, new HSBCPaymentsCallbackAdapter() {
                     @Override
                     public void onEvent(JSONObject data) {
                         // Send out the event to the merchant on JS side
@@ -320,7 +320,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
                     @Nullable
                     @Override
-                    public View getMerchantView(ViewGroup viewGroup, _JuspayMerchantViewType merchantViewType) {
+                    public View getMerchantView(ViewGroup viewGroup, HSBCPaymentsMerchantViewType merchantViewType) {
                         Activity activity = (Activity) getCurrentActivity();
                         if (reactInstanceManager == null || activity == null) {
                             return super.getMerchantView(viewGroup, merchantViewType);
@@ -509,7 +509,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                 ProcessActivity.setActivityCallback(new ActivityCallback() {
                     @Override
                     public void onCreated(@NonNull FragmentActivity processActivity) {
-                        _JuspayPaymentsCheckoutLite.openPaymentPage(processActivity, sdkPayload, new _JuspayPaymentsCallbackAdapter() {
+                        HSBCPaymentsCheckoutLite.openPaymentPage(processActivity, sdkPayload, new HSBCPaymentsCallbackAdapter() {
                             @Override
                             public void onEvent(JSONObject data) {
                                 if (data.optString("event").equals("process_result")) {
@@ -524,7 +524,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
                     @Override
                     public boolean onBackPressed() {
-                        return _JuspayPaymentsCheckoutLite.onBackPressed();
+                        return HSBCPaymentsCheckoutLite.onBackPressed();
                     }
 
                     @Override
@@ -608,20 +608,20 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
     }
 
     /**
-     * A holder class that allows us to maintain _JuspayPaymentServices instance statically without causing a
-     * memory leak. This was required because _JuspayPaymentServices class maintains a reference to the
+     * A holder class that allows us to maintain HSBCPaymentsServices instance statically without causing a
+     * memory leak. This was required because HSBCPaymentsServices class maintains a reference to the
      * activity internally.
      */
     private static class RequestPermissionsResultDelegate {
         @NonNull
-        private WeakReference<_JuspayPaymentServices> hyperServicesHolder = new WeakReference<>(null);
+        private WeakReference<HSBCPaymentsServices> hyperServicesHolder = new WeakReference<>(null);
 
-        synchronized void set(@NonNull _JuspayPaymentServices hyperServices) {
+        synchronized void set(@NonNull HSBCPaymentsServices hyperServices) {
             this.hyperServicesHolder = new WeakReference<>(hyperServices);
         }
 
         void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-            _JuspayPaymentServices hyperServices = hyperServicesHolder.get();
+            HSBCPaymentsServices hyperServices = hyperServicesHolder.get();
 
             if (hyperServices == null) {
                 SdkTracker.trackBootLifecycle(
@@ -646,14 +646,14 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
     private static class ActivityResultDelegate {
         @NonNull
-        private WeakReference<_JuspayPaymentServices> hyperServicesHolder = new WeakReference<>(null);
+        private WeakReference<HSBCPaymentsServices> hyperServicesHolder = new WeakReference<>(null);
 
-        synchronized void set(@NonNull _JuspayPaymentServices hyperServices) {
+        synchronized void set(@NonNull HSBCPaymentsServices hyperServices) {
             this.hyperServicesHolder = new WeakReference<>(hyperServices);
         }
 
         void onActivityResult(int requestCode, int resultCode, Intent data) {
-            _JuspayPaymentServices hyperServices = hyperServicesHolder.get();
+            HSBCPaymentsServices hyperServices = hyperServicesHolder.get();
 
             if (hyperServices == null) {
                 SdkTracker.trackBootLifecycle(

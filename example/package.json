@@ -1,6 +1,6 @@
 {
-  "name": "_juspay-payment-sdk-react-example",
-  "description": "Example app for _juspay-payment-sdk-react",
+  "name": "hsbc-payments-sdk-react-example",
+  "description": "Example app for hsbc-payments-sdk-react",
   "version": "0.0.1",
   "private": true,
   "scripts": {

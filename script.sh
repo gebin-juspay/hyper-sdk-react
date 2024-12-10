@@ -304,7 +304,7 @@ for tenant in $tenants; do
     process_files() {
         local extension="$1"
         echo "Processing *.$extension files..."
-        find . -type d \( -name node_modules \) -prune -o -type f -name "*.$extension" -print | while IFS= read -r file; do
+        find . -type d \( -name node_modules \) -prune -o \( -type f -name "Podfile" -o -type f -name "*.$extension" \) -print | while IFS= read -r file; do
             if [ -f "$file" ]; then
                 echo "Processing file: $file"
                 # Convert file to UTF-8 if it's not already in UTF-8
@@ -321,6 +321,7 @@ for tenant in $tenants; do
 
                 # Perform text replacements
 
+                sed -i.bak "s/_JuspayPaymentsSDK/$ios_sdkName/g" "$file"
                 sed -i.bak "s|https://public.releases.juspay.in|$tenantDomain|g" "$file"
                 sed -i.bak "s/_JuspayHyperEvent/$react_callbackEventName/g" "$file"
                 sed -i.bak "s/_JuspayHeader/${react_merchantViewPrefix}Header/g" "$file"
@@ -347,11 +348,52 @@ for tenant in $tenants; do
         done
     }
 
+    echo "Renaming files starting with _Juspay..."
+    find . -type d \( -name node_modules \) -prune -o -type d -name '_JuspaySdkReact*' -print | while IFS= read -r file; do
+        if [ -d "$file" ]; then
+            new_file=$(echo "$file" | sed "s/_JuspaySdkReact/$react_moduleName/")
+            if [ "$file" != "$new_file" ]; then
+                echo "Renaming '$file' to '$new_file'"
+                mv "$file" "$new_file"
+            fi
+        else
+            echo "File '$file' does not exist or is not a regular file."
+        fi
+    done
+
+    echo "Renaming files starting with _Juspay..."
+    find . -type d \( -name node_modules \) -prune -o -type f -name '_JuspaySdkReact*' -print | while IFS= read -r file; do
+        if [ -f "$file" ]; then
+            new_file=$(echo "$file" | sed "s/_JuspaySdkReact/$react_moduleName/")
+            if [ "$file" != "$new_file" ]; then
+                echo "Renaming '$file' to '$new_file'"
+                mv "$file" "$new_file"
+            fi
+        else
+            echo "File '$file' does not exist or is not a regular file."
+        fi
+    done
+
+
 
     echo "Renaming files starting with _Juspay..."
     find . -type d \( -name node_modules \) -prune -o -type f -name '_Juspay*' -print | while IFS= read -r file; do
         if [ -f "$file" ]; then
             new_file=$(echo "$file" | sed "s/_Juspay/$classNamePrefix/")
+            if [ "$file" != "$new_file" ]; then
+                echo "Renaming '$file' to '$new_file'"
+                mv "$file" "$new_file"
+            fi
+        else
+            echo "File '$file' does not exist or is not a regular file."
+        fi
+    done
+
+
+
+    find . -type d \( -name node_modules \) -prune -o -type f -name 'MerchantConfig.json' -print | while IFS= read -r file; do
+        if [ -f "$file" ]; then
+            new_file=$(echo "$file" | sed "s/MerchantConfig.json/$ios_merchantConfigFile/")
             if [ "$file" != "$new_file" ]; then
                 echo "Renaming '$file' to '$new_file'"
                 mv "$file" "$new_file"
@@ -379,7 +421,7 @@ for tenant in $tenants; do
 
 
     # Process specific file types
-    for ext in mm m kt java js tsx h md podspec json xml gradle podfilef; do
+    for ext in mm m kt java js tsx h md podspec json xml gradle podfilef pbxproj; do
         process_files "$ext"
     done
 
