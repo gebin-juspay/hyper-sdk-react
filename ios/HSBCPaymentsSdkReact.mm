@@ -17,7 +17,7 @@
 #import <React/RCTModalHostViewController.h>
 #import <React/RCTRootView.h>
 
-#import <HSBCPayment/HSBCPaymentsServices.h>
+#import "HSBCPaymentsServices.h"
 
 __weak static HSBCPaymentsServices *_hyperServicesReference;
 

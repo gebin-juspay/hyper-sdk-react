@@ -7,6 +7,7 @@ export LC_ALL=en_US.UTF-8
 
 
 response=$(curl -s -w "%{http_code}" -o tenant-configs.json "https://hypersdk.juspay.in/sdk-config-server/tenant-configs.json")
+minHyperSDKIOSVersion="2.2.1.14"
 
 # Check for curl errors
 if [[ $? -ne 0 ]]; then
@@ -133,6 +134,44 @@ for tenant in $tenants; do
 
     git rm -rf .
     git clean -fxd
+
+
+    download_and_extract() {
+        # Parameters: URL of the zip file and target directory for extraction
+        local url="https://public.releases.juspay.in/hyper-sdk/ios/tenant-wrappers/$minHyperSDKIOSVersion/$ios_sdkName.zip"
+        local target_dir="./ios"
+
+        # Ensure the target directory exists
+        mkdir -p "$target_dir"
+
+        # Get the file name from the URL
+        local file_name=$(basename "$url")
+
+        # Download the zip file
+        echo "Downloading $file_name..."
+        curl -L -o "$file_name" "$url"
+
+        # Check if the download was successful
+        if [[ $? -ne 0 ]]; then
+            echo "Download failed!"
+            return 1
+        fi
+
+        # Extract the ZIP file
+        echo "Extracting $file_name to $target_dir..."
+        unzip -q "$file_name" -d "$target_dir"
+
+        # Check if the extraction was successful
+        if [[ $? -ne 0 ]]; then
+            echo "Extraction failed!"
+            return 1
+        fi
+
+        # Clean up the downloaded zip file
+        rm "$file_name"
+
+        echo "Download and extraction complete!"
+    }
 
     copy_contents() {
         if [ ! -d "$TEMPLATE_REPO_PATH" ]; then
@@ -300,6 +339,7 @@ for tenant in $tenants; do
 
     echo "Replacing '_juspay' with '$TENANT_ID' and '_Juspay' with '$classNamePrefix'... and sdk name is '$react_sdkName'"
 
+    download_and_extract
     # Function to handle text replacement in files
     process_files() {
         local extension="$1"

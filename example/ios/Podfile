@@ -44,7 +44,7 @@ target 'HyperSdkReactExample' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  pod 'HSBCPayments', :podspec => 'https://api.dms.gbm.hsbc.com/hyper/bundles/in.juspay.merchants/juspaymigration/ios/release/2.2.1.14/sdk_build_config.podspec'
+  # pod 'HSBCPaymentsSDK', :podspec => 'https://api.dms.gbm.hsbc.com/hyper/bundles/in.juspay.merchants/juspaymigration/ios/release/2.2.1.14/sdk_build_config.podspec'
 
   target 'HyperSdkReactExampleTests' do
     inherit! :complete
@@ -64,7 +64,7 @@ target 'HyperSdkReactExample' do
       end
     end
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
-    fuse_path = "./Pods/TestServices/Fuse.rb"
+    fuse_path = "../node_modules/hsbc-payments-sdk-react/ios/HSBCPaymentsSDK/Fuse.rb"
     clean_assets = true # Pass true to re-download all the assets
     if File.exist?(fuse_path)
       if system("ruby", fuse_path.to_s, clean_assets.to_s)

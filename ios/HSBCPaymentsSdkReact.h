@@ -9,7 +9,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTBridge.h>
 #import <React/RCTEventEmitter.h>
-#import <HSBCPayment/HSBCPaymentsServices.h>
+#import "HSBCPaymentsServices.h"
 #import <React/RCTRootView.h>
 #import <React/RCTViewManager.h>
 
