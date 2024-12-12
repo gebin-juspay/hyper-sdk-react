@@ -17,7 +17,7 @@
 #import <React/RCTModalHostViewController.h>
 #import <React/RCTRootView.h>
 
-#import <_JuspayPayments/_JuspayPaymentsServices.h>
+#import <_JuspayPaymentsSDK/_JuspayPaymentsServices.h>
 
 __weak static _JuspayPaymentsServices *_hyperServicesReference;
 
@@ -166,14 +166,14 @@ NSString *JUSPAY_FOOTER_ATTACHED = @"_JuspayFooterAttached";
 }
 
 - (NSString*) getClientId:(NSDictionary*)data {
-    if(data == nil || data["payload"] == nil) {
+    if(data == nil || data[@"payload"] == nil) {
         return nil;
     }
-    if(data["clientId"]) {
-        return data["clientId"];
+    if(data[@"clientId"]) {
+        return data[@"clientId"];
     }
-    if(data["client_id"]) {
-        return data["client_id"];
+    if(data[@"client_id"]) {
+        return data[@"client_id"];
     }
     return nil;
 }
@@ -211,7 +211,7 @@ RCT_EXPORT_METHOD(preFetch:(NSString *)data) {
         @try {
             NSDictionary *jsonData = [_JuspaySDKReact stringToDictionary:data];
             if (jsonData && [jsonData isKindOfClass:[NSDictionary class]] && jsonData.allKeys.count>0) {
-                [_JuspayPaymentsServices preFetch:jsonData];
+                // [_JuspayPaymentsServices preFetch:jsonData];
             } else {
 
             }
@@ -368,7 +368,7 @@ RCT_EXPORT_METHOD(process:(nonnull NSNumber *)viewTag nameSpace:(NSString *)name
     _JuspayPaymentsServices *hyperServicesInstance = _hyperServicesReference;
     if (payload && payload.length>0) {
         @try {
-            NSDictionary *jsonData = [HyperSdkReact stringToDictionary:payload];
+            NSDictionary *jsonData = [_JuspaySDKReact stringToDictionary:payload];
             if (jsonData && [jsonData isKindOfClass:[NSDictionary class]] && jsonData.allKeys.count>0) {
                 [self.bridge.uiManager addUIBlock:^(RCTUIManager *uiManager, NSDictionary<NSNumber *, UIView *> *viewRegistry) {
                     if (hyperServicesInstance.baseViewController == nil || hyperServicesInstance.baseViewController.view.window == nil) {
