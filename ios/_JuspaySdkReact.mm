@@ -17,7 +17,7 @@
 #import <React/RCTModalHostViewController.h>
 #import <React/RCTRootView.h>
 
-#import <_JuspayPaymentsSDK/_JuspayPaymentsServices.h>
+#import "_JuspayPaymentsServices.h"
 
 __weak static _JuspayPaymentsServices *_hyperServicesReference;
 
