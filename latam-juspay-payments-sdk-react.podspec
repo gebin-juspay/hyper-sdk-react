@@ -22,7 +22,7 @@ end
 puts ("HyperSDK Version: #{hyper_sdk_version}")
 
 Pod::Spec.new do |s|
-  s.name         = "_juspay-payment-sdk-react"
+  s.name         = "latam-juspay-payments-sdk-react"
   s.version      = package["version"]
   s.summary      = package["description"]
   s.homepage     = package["homepage"]

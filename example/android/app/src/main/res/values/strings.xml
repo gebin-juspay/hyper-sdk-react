@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">_JuspaySDKReact Example</string>
+    <string name="app_name">LatamJuspayPaymentsSdkReact Example</string>
     <bool name="use_local_assets">false</bool>
 </resources>

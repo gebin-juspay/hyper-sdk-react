@@ -4,12 +4,12 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://public.releases.juspay.in/hyper-sdk/" }
+        maven { url "https://payments.juspay.io/hyper-sdk/" }
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:4.0.1'
-        classpath 'in._juspay_group_id:hypersdk.plugin:2.2.5'
+        classpath 'io.juspay:latamhypersdk.plugin:2.2.5'
     }
 }
 
@@ -18,7 +18,7 @@ def isNewArchitectureEnabled() {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: 'hypersdk.plugin'
+apply plugin: 'latamhypersdk.plugin'
 
 
 def appProject = rootProject.allprojects.find { it.plugins.hasPlugin('com.android.application') }
@@ -75,8 +75,8 @@ repositories {
 if (isNewArchitectureEnabled()) {
     react {
         jsRootDir = file("../src/")
-        libraryName = "_JuspaySDKReact"
-        codegenJavaPackageName = "in._juspay"
+        libraryName = "LatamJuspayPaymentsSdkReact"
+        codegenJavaPackageName = "in.juspay_lt"
     }
 }
 
@@ -111,10 +111,10 @@ static def getExcludedMicroSdks(rootProject) {
 }
 
 static def getClientId(rootProject) {
-    if (!rootProject.hasProperty('_juspayClientId')) {
-        throw new GradleException("_juspayClientId parameter is required in ext block of root build.gradle")
+    if (!rootProject.hasProperty('latamJuspayClientId')) {
+        throw new GradleException("latamJuspayClientId parameter is required in ext block of root build.gradle")
     }
-    return rootProject._juspayClientId
+    return rootProject.latamJuspayClientId
 }
 
 dependencies {
@@ -125,7 +125,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.0.0'
 }
 
-_juspaySdkPlugin {
+latamHyperSdkPlugin {
     clientId = getClientId(rootProject)
     sdkVersion = getHyperSDKVersion(rootProject)
 }

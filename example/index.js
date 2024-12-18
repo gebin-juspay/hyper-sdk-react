@@ -3,19 +3,19 @@ import App from './src/App';
 import JuspayTopView from './src/JuspayTopView';
 import JuspayTopViewAttached from './src/JuspayTopViewAttached';
 import { name as appName } from './app.json';
-import _JuspaySDKReact from '_juspay-payment-sdk-react';
+import LatamJuspayPaymentsSdkReact from 'latam-juspay-payments-sdk-react';
 
 AppRegistry.registerComponent(appName, () => App);
 
-_JuspaySDKReact.notifyAboutRegisterComponent(
-  _JuspaySDKReact._JuspayHeaderAttached
+LatamJuspayPaymentsSdkReact.notifyAboutRegisterComponent(
+  LatamJuspayPaymentsSdkReact.LatamJuspayHeaderAttached
 );
 AppRegistry.registerComponent(
-  _JuspaySDKReact._JuspayHeaderAttached,
+  LatamJuspayPaymentsSdkReact.LatamJuspayHeaderAttached,
   () => JuspayTopViewAttached
 );
-_JuspaySDKReact.notifyAboutRegisterComponent(_JuspaySDKReact._JuspayHeader);
+LatamJuspayPaymentsSdkReact.notifyAboutRegisterComponent(LatamJuspayPaymentsSdkReact.LatamJuspayHeader);
 AppRegistry.registerComponent(
-  _JuspaySDKReact._JuspayHeader,
+  LatamJuspayPaymentsSdkReact.LatamJuspayHeader,
   () => JuspayTopView
 );

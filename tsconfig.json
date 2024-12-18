@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "_juspay-payment-sdk-react": ["./src/index"]
+      "latam-juspay-payments-sdk-react": ["./src/index"]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
