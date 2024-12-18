@@ -169,11 +169,11 @@ NSString *JUSPAY_FOOTER_ATTACHED = @"_JuspayFooterAttached";
     if(data == nil || data[@"payload"] == nil) {
         return nil;
     }
-    if(data[@"clientId"]) {
-        return data[@"clientId"];
+    if(data[@"payload"][@"clientId"]) {
+        return data[@"payload"][@"clientId"];
     }
-    if(data[@"client_id"]) {
-        return data[@"client_id"];
+    if(data[@"payload"][@"client_id"]) {
+        return data[@"payload"][@"client_id"];
     }
     return nil;
 }

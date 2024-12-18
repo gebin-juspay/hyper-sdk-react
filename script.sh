@@ -67,8 +67,8 @@ mkdir "$HOME_PATH/output"
 # Loop through each tenant
 for tenant in $tenants; do
     echo "Processing tenant: $tenant"payments
-    rm -rf "$TEMPERORY_SDK_PATH/hyper-sdk-react"
-    rm -rf "$TARGET_REPO_PATH/hyper-sdk-react"
+    # rm -rf "$TEMPERORY_SDK_PATH/hyper-sdk-react"
+    # rm -rf "$TARGET_REPO_PATH/hyper-sdk-react"
     TENANT_ID=$tenant
 
     # Parse the JSON response using the tenant variable
@@ -76,6 +76,14 @@ for tenant in $tenants; do
     assetZipUrl_sandbox=$(echo "$response" | jq -r ".${tenant}.ios.assetZipUrl.sandbox")
     assetZipUrl_versioned=$(echo "$response" | jq -r ".${tenant}.ios.assetZipUrl.versioned")
     ios_sdkName=$(echo "$response" | jq -r ".${tenant}.ios.sdkName")
+    echo "gebin sdk name is $ios_sdkName"
+    if [ "$tenant" = "jp_global" ]; then
+        # Assign a new value to the variable if the condition is true
+        ios_sdkName=$ios_sdkName
+    else
+        echo "condition not met $jp_global"
+        continue
+    fi
     ios_merchantConfigFile=$(echo "$response" | jq -r ".${tenant}.ios.merchantConfigFile")
     ios_releaseConfigUrl=$(echo "$response" | jq -r ".${tenant}.ios.releaseConfigUrl")
 
@@ -273,10 +281,10 @@ for tenant in $tenants; do
 
     function commit_and_push_changes() {
         cd "$TARGET_REPO_PATH/hyper-sdk-react" || exit
-        if [ ! -d "./git" ]; then
-            echo "Initializing a fresh repo"
-            git init
-        fi
+        # if [ ! -d "./git" ]; then
+        #     echo "Initializing a fresh repo"
+        #     git init
+        # fi
         # Configure Git (adjust user details as needed)
         # git config user.name "Your Name"
         # git config user.email "your-email@example.com"
@@ -426,6 +434,7 @@ for tenant in $tenants; do
     done
 
 
+
     # Main script
     # check_repo_exists || create_repo
     # if [ -d "$TARGET_REPO_PATH" ]; then
@@ -437,7 +446,25 @@ for tenant in $tenants; do
     # move_contents
     # replace_contents
     cp -r "$TEMPERORY_SDK_PATH/hyper-sdk-react" "$TARGET_REPO_PATH"
+    url="$tenantDomain/hyper-sdk/ios/tenant-wrappers/2.2.2/$ios_sdkName.zip"
+    destination_path="$TARGET_REPO_PATH/hyper-sdk-react/ios/$ios_sdkName"         # Path where the ZIP file will be extracted
+    rm -rf "$destination_path"
 
+    mkdir "$destination_path"
+
+    echo "gebin url is $url"
+
+
+    # Download the ZIP file using wget or curl
+    wget -O "$destination_path/$ios_sdkName.zip" "$url"  # Using wget
+    # or you can use curl if wget is not installed
+    # curl -L -o "$destination_path/file.zip" "$url"
+
+    # Extract the ZIP file
+    unzip "$destination_path/$ios_sdkName.zip" -d "$destination_path"
+    rm "$destination_path/$ios_sdkName.zip"
+
+    echo "Download and extraction completed successfully."
 
 
     commit_and_push_changes
