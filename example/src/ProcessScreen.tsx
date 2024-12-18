@@ -22,7 +22,7 @@ import {
 } from 'react-native';
 // import { Picker } from '@react-native-picker/picker';
 import CheckBox from '@react-native-community/checkbox';
-import _JuspaySDKReact, { HyperFragmentView } from '_juspay-payment-sdk-react';
+import HSBCPaymentsSdkReact, { HyperFragmentView } from 'hsbc-payments-sdk-react';
 import HyperAPIUtils from './API';
 import HyperUtils from './Utils';
 import { useNavigation } from '@react-navigation/native';
@@ -130,9 +130,9 @@ class ProcessScreen extends React.Component {
   }
 
   componentDidMount() {
-    const eventEmitter = new NativeEventEmitter(NativeModules._JuspaySDKReact);
+    const eventEmitter = new NativeEventEmitter(NativeModules.HSBCPaymentsSdkReact);
     this.eventListener = eventEmitter.addListener(
-      _JuspaySDKReact._JuspayHyperEvent,
+      HSBCPaymentsSdkReact.HSBCPaymentsEvent,
       (resp) => {
         // HyperUtils.alertCallbackResponse('ProcessScreen', resp);
         this.setState({ resultText: resp });
@@ -144,7 +144,7 @@ class ProcessScreen extends React.Component {
         this.handleClose();
         return true;
       }
-      return !_JuspaySDKReact.isNull() && _JuspaySDKReact.onBackPressed();
+      return !HSBCPaymentsSdkReact.isNull() && HSBCPaymentsSdkReact.onBackPressed();
     });
   }
 
@@ -221,7 +221,7 @@ class ProcessScreen extends React.Component {
               signNew,
               this.merchantKeyId
             );
-            _JuspaySDKReact.process(JSON.stringify(payload));
+            HSBCPaymentsSdkReact.process(JSON.stringify(payload));
           }}
         />
       </View>
@@ -376,7 +376,7 @@ class ProcessScreen extends React.Component {
                 title="Get Payment Methods"
                 onPress={() => {
                   var payload = HyperUtils.generatePaymentMethodsPayload();
-                  _JuspaySDKReact.process(JSON.stringify(payload));
+                  HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -388,7 +388,7 @@ class ProcessScreen extends React.Component {
                   var payload = HyperUtils.generateListCardsPayload(
                     this.clientAuthToken
                   );
-                  _JuspaySDKReact.process(JSON.stringify(payload));
+                  HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -400,7 +400,7 @@ class ProcessScreen extends React.Component {
                   var payload = HyperUtils.generateGetUPIAppsPayload(
                     this.orderId
                   );
-                  _JuspaySDKReact.process(JSON.stringify(payload));
+                  HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -422,7 +422,7 @@ class ProcessScreen extends React.Component {
                     this.clientAuthToken
                   );
                   console.log(payload);
-                  _JuspaySDKReact.process(JSON.stringify(payload));
+                  HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                 }}
               />
             ) : null}
@@ -444,7 +444,7 @@ class ProcessScreen extends React.Component {
                       this.sdkPresent
                     );
                     console.log(payload);
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -468,7 +468,7 @@ class ProcessScreen extends React.Component {
                       this.clientAuthToken,
                       this.nbTxnBank
                     );
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -555,7 +555,7 @@ class ProcessScreen extends React.Component {
                       this.authType,
                       this.state.saveToLocker
                     );
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -597,7 +597,7 @@ class ProcessScreen extends React.Component {
                       this.vpa,
                       this.state.upiSdkPresent
                     );
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -621,7 +621,7 @@ class ProcessScreen extends React.Component {
                       this.clientAuthToken
                     );
                     console.log(payload);
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -662,7 +662,7 @@ class ProcessScreen extends React.Component {
                       this.otp,
                       this.clientAuthToken
                     );
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -720,7 +720,7 @@ class ProcessScreen extends React.Component {
                       this.directWalletToken,
                       this.sdkPresent
                     );
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -752,7 +752,7 @@ class ProcessScreen extends React.Component {
                       this.walletId,
                       this.clientAuthToken
                     );
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -776,7 +776,7 @@ class ProcessScreen extends React.Component {
                       this.clientAuthToken
                     );
                     console.log(payload);
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
               </View>
@@ -837,7 +837,7 @@ class ProcessScreen extends React.Component {
                       this.merchantKeyId
                     );
 
-                    _JuspaySDKReact.processWithActivity(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.processWithActivity(JSON.stringify(payload));
                   }}
                 /> */}
 
@@ -853,7 +853,7 @@ class ProcessScreen extends React.Component {
                       this.merchantKeyId
                     );
 
-                    _JuspaySDKReact.process(JSON.stringify(payload));
+                    HSBCPaymentsSdkReact.process(JSON.stringify(payload));
                   }}
                 />
 
@@ -881,7 +881,7 @@ class ProcessScreen extends React.Component {
             {/* <CustomButton
               title="Is Initialised?"
               onPress={() => {
-                _JuspaySDKReact.isInitialised().then((init: boolean) => {
+                HSBCPaymentsSdkReact.isInitialised().then((init: boolean) => {
                   // console.warn('isInitialised:', init);
                   HyperUtils.showCopyAlert('isInitialised', init + '');
                 });
@@ -890,7 +890,7 @@ class ProcessScreen extends React.Component {
             <CustomButton
               title="Terminate"
               onPress={() => {
-                _JuspaySDKReact.terminate();
+                HSBCPaymentsSdkReact.terminate();
               }}
             />
             {/* <CustomButton
@@ -985,7 +985,7 @@ class ProcessScreen extends React.Component {
                     hidePaymentWidget: false,
                   },
                 };
-                _JuspaySDKReact.process(JSON.stringify(data));
+                HSBCPaymentsSdkReact.process(JSON.stringify(data));
               }}
             />
           </View> */}

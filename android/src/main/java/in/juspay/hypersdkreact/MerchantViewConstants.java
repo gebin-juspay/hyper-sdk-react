@@ -4,13 +4,13 @@
  * This source code is licensed under the AGPL 3.0 license found in the
  * LICENSE file in the root directory of this source tree.
  */
-package in._juspay.hypersdkreact;
+package in.hsbc_hk.hypersdkreact;
 
 public class MerchantViewConstants {
 
-    static final String JUSPAY_HEADER = "_JuspayHeader"; // gebin to change
-    static final String JUSPAY_FOOTER = "_JuspayFooter";
-    static final String JUSPAY_HEADER_ATTACHED = "_JuspayHeaderAttached";
-    static final String JUSPAY_FOOTER_ATTACHED = "_JuspayFooterAttached";
+    static final String JUSPAY_HEADER = "HSBCHeader"; // gebin to change
+    static final String JUSPAY_FOOTER = "HSBCFooter";
+    static final String JUSPAY_HEADER_ATTACHED = "HSBCHeaderAttached";
+    static final String JUSPAY_FOOTER_ATTACHED = "HSBCFooterAttached";
 
 }
