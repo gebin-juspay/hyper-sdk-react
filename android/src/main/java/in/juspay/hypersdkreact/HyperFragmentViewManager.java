@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package in._juspay.hypersdkreact;
+package in.test.hypersdkreact;
 
 import android.view.Choreographer;
 import android.view.View;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 import java.util.Map;
 
 import in.juspay.hypersdk.core.SdkTracker;
-import in._juspay._juspaywrappersdk._JuspayPaymentServices;
+import `in`.juspay.payments.JuspayPaymentsServices;
 
 public class HyperFragmentViewManager extends ViewGroupManager<FrameLayout> {
 
@@ -82,7 +82,7 @@ public class HyperFragmentViewManager extends ViewGroupManager<FrameLayout> {
                 JSONObject payload = new JSONObject(payloadStr);
                 payload.getJSONObject("payload").put("fragmentViewGroups", fragments);
                 FragmentActivity activity = (FragmentActivity) reactContext.getCurrentActivity();
-                _JuspayPaymentServices hyperServices = HyperSdkReactModule.getHyperServices();
+                JuspayPaymentsServices hyperServices = HyperSdkReactModule.getHyperServices();
                 if (activity == null) {
                     SdkTracker.trackBootLifecycle(
                             LogConstants.SUBCATEGORY_HYPER_SDK,

@@ -21,7 +21,7 @@ import {
   ScrollView,
 } from 'react-native';
 import HyperAPIUtils from './API';
-import _JuspaySDKReact from '_juspay-payment-sdk-react';
+import HyperSdkReact from 'hyper-sdk-react';
 import HyperUtils from './Utils';
 import merchantConfig from './merchant_config.json';
 import customerConfig from './customer_config.json';
@@ -77,9 +77,9 @@ class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    const eventEmitter = new NativeEventEmitter(NativeModules._JuspaySDKReact);
+    const eventEmitter = new NativeEventEmitter(NativeModules.HyperSdkReact);
     this.eventListener = eventEmitter.addListener(
-      _JuspaySDKReact._JuspayHyperEvent,
+      HyperSdkReact.HyperEvent,
       (resp) => {
         HyperUtils.alertCallbackResponse('HomeScreen', resp);
       }
@@ -183,13 +183,13 @@ class HomeScreen extends React.Component {
                   this.state.pickerSelected
                 );
                 // console.warn('preFetchPayload:', this.preFetchPayload);
-                _JuspaySDKReact.preFetch(JSON.stringify(this.preFetchPayload));
+                HyperSdkReact.preFetch(JSON.stringify(this.preFetchPayload));
               }}
             />
             <CustomButton
               title="Create HyperService Object"
               onPress={() => {
-                _JuspaySDKReact.createHyperServices();
+                HyperSdkReact.createHyperServices();
               }}
             />
 
@@ -238,7 +238,7 @@ class HomeScreen extends React.Component {
                           this.merchantKeyId
                         );
                   // console.warn('initiatePayload:', this.initiatePayload);
-                  _JuspaySDKReact.initiate(
+                  HyperSdkReact.initiate(
                     JSON.stringify(this.initiatePayload)
                   );
                 }}
@@ -264,7 +264,7 @@ class HomeScreen extends React.Component {
             <CustomButton
               title="Is Initialised?"
               onPress={() => {
-                _JuspaySDKReact.isInitialised().then((init: boolean) => {
+                HyperSdkReact.isInitialised().then((init: boolean) => {
                   // console.warn('isInitialised:', init);
                   HyperUtils.showCopyAlert('isInitialised', init + '');
                 });
@@ -273,7 +273,7 @@ class HomeScreen extends React.Component {
             <CustomButton
               title="Terminate"
               onPress={() => {
-                _JuspaySDKReact.terminate();
+                HyperSdkReact.terminate();
               }}
             />
           </View>
