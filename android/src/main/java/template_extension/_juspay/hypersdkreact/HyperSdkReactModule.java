@@ -213,12 +213,10 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
 
     @ReactMethod
-    public void createHyperServices() {
-
-    }
-
-    @ReactMethod
-    public void create_JuspayPaymentServicesWithClientId(String clientId) {
+    public void createHyperServices(String clientId) {
+        if(clientId == null || clientId.equals("")) {
+            return;
+        }
         synchronized (lock) {
             FragmentActivity activity = (FragmentActivity) getCurrentActivity();
 
@@ -251,6 +249,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
             requestPermissionsResultDelegate.set(hyperServices);
             activityResultDelegate.set(hyperServices);
         }
+
     }
 
     @ReactMethod(isBlockingSynchronousMethod = true)
@@ -288,7 +287,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                             "client id is null");
                         return;
                     }
-                    create_JuspayPaymentServicesWithClientId(clientId);
+                    createHyperServices(clientId);
                     if(hyperServices == null) {
                         SdkTracker.trackBootLifecycle(
                             LogConstants.SUBCATEGORY_HYPER_SDK,

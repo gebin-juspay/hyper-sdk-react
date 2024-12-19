@@ -67,8 +67,17 @@ mkdir "$HOME_PATH/output"
 # Loop through each tenant
 for tenant in $tenants; do
     echo "Processing tenant: $tenant"payments
-    # rm -rf "$TEMPERORY_SDK_PATH/hyper-sdk-react"
-    # rm -rf "$TARGET_REPO_PATH/hyper-sdk-react"
+    echo "gebin sdk name is $ios_sdkName"
+    if [ "$tenant" = "jp_global" ]; then
+        # Assign a new value to the variable if the condition is true
+        echo "already done"
+        # ios_sdkName=$ios_sdkName
+    else
+        echo "condition not met $jp_global"
+        continue
+    fi
+    rm -rf "$TEMPERORY_SDK_PATH/hyper-sdk-react"
+    rm -rf "$TARGET_REPO_PATH/hyper-sdk-react"
     TENANT_ID=$tenant
 
     # Parse the JSON response using the tenant variable
@@ -76,14 +85,6 @@ for tenant in $tenants; do
     assetZipUrl_sandbox=$(echo "$response" | jq -r ".${tenant}.ios.assetZipUrl.sandbox")
     assetZipUrl_versioned=$(echo "$response" | jq -r ".${tenant}.ios.assetZipUrl.versioned")
     ios_sdkName=$(echo "$response" | jq -r ".${tenant}.ios.sdkName")
-    echo "gebin sdk name is $ios_sdkName"
-    if [ "$tenant" = "jp_global" ]; then
-        # Assign a new value to the variable if the condition is true
-        ios_sdkName=$ios_sdkName
-    else
-        echo "condition not met $jp_global"
-        continue
-    fi
     ios_merchantConfigFile=$(echo "$response" | jq -r ".${tenant}.ios.merchantConfigFile")
     ios_releaseConfigUrl=$(echo "$response" | jq -r ".${tenant}.ios.releaseConfigUrl")
 
@@ -305,7 +306,22 @@ for tenant in $tenants; do
     cd "$TEMPERORY_SDK_PATH/hyper-sdk-react"
     echo "gebin removing git"
     rm -rf ".git"
+    packageNameSplit="${android_packageName//./\/}"
 
+    # Define source and destination directories
+    src_dir="./android/src/main/java/template_extension/_juspay/hypersdkreact"
+    dest_dir="./android/src/main/java/$packageNameSplit/hypersdkreact"
+
+    # Create the destination directory if it does not exist
+    mkdir -p "$dest_dir"
+
+    # Move the contents of the source directory to the destination
+    mv "$src_dir"/* "$dest_dir"
+
+    # Optional: Remove the now empty source directory
+    rm -rf "./android/src/main/java/template_extension"
+
+    echo "Renamed and moved directory to $dest_dir"
     echo "Replacing '_juspay' with '$TENANT_ID' and '_Juspay' with '$classNamePrefix'... and sdk name is '$react_sdkName'"
 
     # Function to handle text replacement in files
@@ -329,6 +345,7 @@ for tenant in $tenants; do
 
                 # Perform text replacements
 
+                sed -i.bak "s/in._juspay.hypersdkreact/${android_packageName}.hypersdkreact/g" "$file"
                 sed -i.bak "s/_JuspayPaymentsSDK/$ios_sdkName/g" "$file"
                 sed -i.bak "s|https://public.releases.juspay.in|$tenantDomain|g" "$file"
                 sed -i.bak "s/_JuspayHyperEvent/$react_callbackEventName/g" "$file"
@@ -355,6 +372,9 @@ for tenant in $tenants; do
             fi
         done
     }
+
+
+
 
     echo "Renaming files starting with _Juspay..."
     find . -type d \( -name node_modules \) -prune -o -type d -name '_JuspaySdkReact*' -print | while IFS= read -r file; do
@@ -452,7 +472,7 @@ for tenant in $tenants; do
 
     mkdir "$destination_path"
 
-    echo "gebin url is $url"
+    # Replace dots with slashes in the package name
 
 
     # Download the ZIP file using wget or curl

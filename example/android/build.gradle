@@ -11,7 +11,7 @@ buildscript {
         ndkVersion = "23.1.7779620"
 
         // Hyper SDK
-        _juspayClientId = 'juspaymigration'
+        _juspayClientId = 'testlatamprod13'
         hyperSDKVersion = '2.1.33'
         excludedMicroSDKs = []
     }

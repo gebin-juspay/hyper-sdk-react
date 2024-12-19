@@ -221,12 +221,10 @@ RCT_EXPORT_METHOD(preFetch:(NSString *)data) {
     }
 }
 
-RCT_EXPORT_METHOD(createHyperServices) {
-
-}
-
-RCT_EXPORT_METHOD(create_JuspayPaymentServices:(NSString*) clientId) {
-    [self createPaymentServices:clientId];
+RCT_EXPORT_METHOD(createHyperServices:(NSString*) clientId) {
+    if(! (clientId == nil || [clientId isEqualToString:@""])) {
+        [self createPaymentServices:clientId];
+    }
 }
 
 RCT_EXPORT_METHOD(initiate:(NSString *)data) {

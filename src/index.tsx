@@ -45,7 +45,7 @@ if (Platform.OS === 'ios') {
 type _JuspaySDKReactType = {
   _JuspayHyperEvent: string;
   preFetch(data: string): void;
-  createHyperServices(): void;
+  createHyperServices(clientId: string): void;
   initiate(data: string): void;
   process(data: string): void;
   processWithActivity(data: string): void;
