@@ -213,7 +213,13 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
 
 
     @ReactMethod
-    public void createHyperServices(String clientId) {
+    public void createHyperServices() {
+
+    }
+
+
+    @ReactMethod
+    public void createHyperServicesWithClientId(String clientId) {
         if(clientId == null || clientId.equals("")) {
             return;
         }
@@ -287,7 +293,7 @@ public class HyperSdkReactModule extends ReactContextBaseJavaModule implements A
                             "client id is null");
                         return;
                     }
-                    createHyperServices(clientId);
+                    createHyperServicesWithClientId(clientId);
                     if(hyperServices == null) {
                         SdkTracker.trackBootLifecycle(
                             LogConstants.SUBCATEGORY_HYPER_SDK,
