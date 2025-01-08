@@ -1,6 +1,6 @@
 {
-  "name": "_juspay-payment-sdk-react-example",
-  "description": "Example app for _juspay-payment-sdk-react",
+  "name": "global-juspay-payments-sdk-react-example",
+  "description": "Example app for global-juspay-payments-sdk-react",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -25,7 +25,7 @@
     "react-native-gradle-plugin": "^0.71.19",
     "react-native-safe-area-context": "^4.5.2",
     "react-native-screens": "^3.20.0",
-    "_juspay-payment-sdk-react":"../"
+    "global-juspay-payments-sdk-react":"../"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

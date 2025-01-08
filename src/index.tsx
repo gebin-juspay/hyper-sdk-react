@@ -8,13 +8,13 @@
 import { NativeModules, Platform } from 'react-native';
 
 const LINKING_ERROR =
-  `The package '_juspay-payment-sdk-react' doesn't seem to be linked. Make sure: \n\n` +
+  `The package 'global-juspay-payments-sdk-react' doesn't seem to be linked. Make sure: \n\n` +
   Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const _JuspaySDKReact = NativeModules._JuspaySDKReact
-  ? NativeModules._JuspaySDKReact
+const GlobalJuspayPaymentsSdkReact = NativeModules.GlobalJuspayPaymentsSdkReact
+  ? NativeModules.GlobalJuspayPaymentsSdkReact
   : new Proxy(
       {},
       {
@@ -27,8 +27,8 @@ const _JuspaySDKReact = NativeModules._JuspaySDKReact
 export { default as HyperFragmentView } from './HyperFragmentView';
 
 if (Platform.OS === 'android') {
-  _JuspaySDKReact.updateBaseViewController = () => {};
-  _JuspaySDKReact.updateMerchantViewHeight = (
+  GlobalJuspayPaymentsSdkReact.updateBaseViewController = () => {};
+  GlobalJuspayPaymentsSdkReact.updateMerchantViewHeight = (
     _tag: string,
     _height: number
   ) => {
@@ -37,13 +37,13 @@ if (Platform.OS === 'android') {
 }
 
 if (Platform.OS === 'ios') {
-  _JuspaySDKReact.processWithActivity = (data: string) => {
-    _JuspaySDKReact.process(data);
+  GlobalJuspayPaymentsSdkReact.processWithActivity = (data: string) => {
+    GlobalJuspayPaymentsSdkReact.process(data);
   };
 }
 
-type _JuspaySDKReactType = {
-  _JuspayHyperEvent: string;
+type GlobalJuspayPaymentsSdkReactType = {
+  GlobalJuspayPaymentsEvent: string;
   preFetch(data: string): void;
   createHyperServices(clientId: string): void;
   initiate(data: string): void;
@@ -57,10 +57,10 @@ type _JuspaySDKReactType = {
   openPaymentPage(data: string): void;
   updateMerchantViewHeight(tag: string, height: number): void;
   notifyAboutRegisterComponent(tag: string): void;
-  _JuspayHeader: string;
-  _JuspayHeaderAttached: string;
-  _JuspayFooter: string;
-  _JuspayFooterAttached: string;
+  GlobalJuspayHeader: string;
+  GlobalJuspayHeaderAttached: string;
+  GlobalJuspayFooter: string;
+  GlobalJuspayFooterAttached: string;
 };
 
-export default _JuspaySDKReact as _JuspaySDKReactType;
+export default GlobalJuspayPaymentsSdkReact as GlobalJuspayPaymentsSdkReactType;

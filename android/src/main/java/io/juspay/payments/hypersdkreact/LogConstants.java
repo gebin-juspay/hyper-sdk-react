@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-package in._juspay.hypersdkreact;
+package io.juspay.payments.hypersdkreact;
 
 final class LogConstants {
     static final String CATEGORY_LIFECYCLE = "lifecycle";
