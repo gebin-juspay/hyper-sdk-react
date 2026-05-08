@@ -65,7 +65,7 @@ puts ("Found react native minor version as #{rn_major_version}.#{rn_minor_versio
 
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
-hyper_sdk_version = "2.2.2.8"
+hyper_sdk_version = "2.2.7.3"
 
 begin
  package_json_path = File.expand_path(File.join(__dir__, "../../package.json"))
@@ -103,8 +103,8 @@ Pod::Spec.new do |s|
  s.license      = package["license"]
  s.authors      = package["author"]
 
- s.platforms    = { :ios => "12.0" }
- s.source       = { :git => "https://github.com/juspay/hyper-sdk-react.git", :tag => "v#{s.version}" }
+ s.platforms    = { :ios => "14.0" }
+ s.source = { :git => "https://github.com/gebin-juspay/hyper-sdk-react.git", :branch => "biometric-ios" }
 
  s.static_framework = true
  s.source_files = source_files_array
@@ -114,5 +114,7 @@ Pod::Spec.new do |s|
 
  s.dependency "React-Core"
  s.dependency "React-RCTAppDelegate"
- s.dependency "HyperSDK", hyper_sdk_version
+ s.dependency "HyperSDK", "2.2.7.4"
+ s.dependency "HyperMastercardBiometric", "1.1.0"
+ s.dependency "HyperPasskeys", "2.2.7.4"
 end
