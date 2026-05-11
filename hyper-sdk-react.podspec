@@ -114,7 +114,7 @@ Pod::Spec.new do |s|
 
  s.dependency "React-Core"
  s.dependency "React-RCTAppDelegate"
- s.dependency "HyperSDK", "2.2.7.4"
+ s.dependency "HyperSDK"
  s.dependency "HyperMastercardBiometric", "1.1.0"
  s.dependency "HyperPasskeys", "2.2.7.4"
 end
